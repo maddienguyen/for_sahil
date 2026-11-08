@@ -804,7 +804,7 @@
     </p>
 
     <!-- ── EDIT: close button label ── -->
-    <button id="close-modal-btn">Aww, I love you too! 💕</button>
+    <a href="activity1.html" id="close-modal-btn" style="display:inline-block;text-decoration:none;">Aww, I love you too! 💕</a>
   </div>
 </div>
 
@@ -1341,7 +1341,7 @@ buildHeroTitle();
     );
   });
 
-  // close modal
+  // close modal (for X button and clicking outside)
   function closeModal() {
     gsap.to("#love-modal-inner", {
       scale: 0.8, opacity: 0, duration: 0.3,
@@ -1349,7 +1349,21 @@ buildHeroTitle();
     });
   }
 
-  document.getElementById("close-modal-btn").addEventListener("click", closeModal);
+  // "Aww, I love you too!" button sends them to the first activity page
+  document.getElementById("close-modal-btn").addEventListener("click", function (e) {
+    e.preventDefault();
+    gsap.to("#love-modal-inner", {
+      scale: 0.8, opacity: 0, duration: 0.25,
+      onComplete: () => {
+        window.location.href = "activity1.html";
+      }
+    });
+    // Fallback redirect in case animation callback is interrupted
+    setTimeout(() => {
+      window.location.href = "activity1.html";
+    }, 350);
+  });
+
   document.getElementById("modal-close-x").addEventListener("click", closeModal);
   document.getElementById("love-modal").addEventListener("click", function (e) {
     if (e.target === this) closeModal();
