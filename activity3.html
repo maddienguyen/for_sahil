@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <!-- ── EDIT: browser tab title ── -->
-  <title>Activity 3 💌</title>
+  <title>Activity 3 — Our Future Vision Board 🎨✨</title>
 
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Lato:wght@300;400&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet" />
 
   <style>
     :root {
@@ -18,6 +18,7 @@
       --color-bg-to:   #0a2200;
       --color-accent:  #e63946;
       --color-accent2: #4caf50;
+      --color-gold:    #fbbf24;
       --color-text:    #fff8f8;
       --font-heading:  'Playfair Display', serif;
       --font-body:     'Lato', sans-serif;
@@ -31,7 +32,7 @@
       background: linear-gradient(135deg, var(--color-bg-from) 0%, var(--color-bg-to) 100%);
       color: var(--color-text);
       min-height: 100vh;
-      padding: 0 0 4rem;
+      padding: 0 0 5rem;
     }
 
     .glass {
@@ -60,21 +61,11 @@
 
     .hero-banner {
       width: 100%;
-      max-height: 420px;
+      max-height: 400px;
       object-fit: cover;
       border-radius: 0 0 2rem 2rem;
       display: block;
-    }
-
-    .hero-banner-placeholder {
-      width: 100%;
-      height: 320px;
-      border-radius: 0 0 2rem 2rem;
-      background: linear-gradient(135deg, rgba(76,175,80,0.2), rgba(230,57,70,0.2));
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 5rem;
+      border-bottom: 1px solid rgba(255,255,255,0.15);
     }
 
     .page-title {
@@ -94,45 +85,107 @@
 
     .info-card h3 {
       font-family: var(--font-heading);
-      font-size: 1.1rem;
+      font-size: 1.15rem;
       margin-bottom: 0.4rem;
       color: var(--color-text);
     }
 
     .info-card p, .info-card li {
       font-size: 0.95rem;
-      color: rgba(255,248,248,0.75);
+      color: rgba(255,248,248,0.78);
       line-height: 1.7;
     }
-
-    .info-card ul { padding-left: 1.2rem; }
 
     .link-btn {
       display: inline-flex;
       align-items: center;
       gap: 0.5rem;
-      padding: 0.65rem 1.5rem;
+      padding: 0.8rem 2rem;
       border-radius: 999px;
       text-decoration: none;
-      font-size: 0.9rem;
-      font-weight: 600;
-      transition: transform 0.15s, box-shadow 0.15s;
+      font-size: 1rem;
+      font-weight: 700;
+      transition: transform 0.2s, box-shadow 0.2s;
     }
 
     .link-btn-primary {
       background: linear-gradient(135deg, var(--color-accent), var(--color-accent2));
       color: white;
-      box-shadow: 0 4px 16px rgba(230,57,70,0.4);
+      box-shadow: 0 4px 20px rgba(230,57,70,0.45);
     }
-    .link-btn-primary:hover { transform: scale(1.05); box-shadow: 0 6px 24px rgba(230,57,70,0.6); }
+    .link-btn-primary:hover { transform: scale(1.05); box-shadow: 0 6px 30px rgba(230,57,70,0.65); }
 
     .link-btn-secondary {
       border: 1px solid rgba(255,255,255,0.25);
       background: rgba(255,255,255,0.08);
       color: var(--color-text);
     }
-    .link-btn-secondary:hover { background: rgba(255,255,255,0.15); transform: scale(1.03); }
+    .link-btn-secondary:hover { background: rgba(255,255,255,0.18); transform: scale(1.03); }
 
+    /* Idea Card Grid */
+    .idea-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.2rem;
+    }
+
+    .idea-card {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 1.4rem;
+      padding: 1.5rem;
+      transition: transform 0.25s, box-shadow 0.25s, background 0.25s;
+    }
+    .idea-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+      background: rgba(255,255,255,0.1);
+      border-color: rgba(230,57,70,0.35);
+    }
+
+    .idea-card-header {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .idea-icon {
+      font-size: 2.2rem;
+      line-height: 1;
+    }
+
+    .idea-title {
+      font-family: var(--font-heading);
+      font-size: 1.2rem;
+      color: var(--color-text);
+    }
+
+    .idea-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .idea-list li {
+      position: relative;
+      padding-left: 1.4rem;
+      margin-bottom: 0.45rem;
+      font-size: 0.9rem;
+      color: rgba(255,248,248,0.75);
+      line-height: 1.55;
+    }
+
+    .idea-list li::before {
+      content: "✦";
+      position: absolute;
+      left: 0;
+      color: var(--color-accent2);
+      font-size: 0.8rem;
+      top: 1px;
+    }
+
+    /* Photo grid */
     .photo-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
@@ -174,7 +227,7 @@
       cursor: default;
     }
 
-    /* Special "grand finale" sparkle animation */
+    /* Floating sparkles */
     .sparkle-bg {
       position: fixed;
       inset: 0;
@@ -211,121 +264,289 @@
 </head>
 <body>
 
-<!-- Sparkle background (grand finale feel) -->
+<!-- Sparkle background -->
 <div class="sparkle-bg" id="sparkle-bg"></div>
 
+<!-- Lightbox -->
 <div id="lightbox">
   <img id="lightbox-img" src="" alt="full size photo" />
 </div>
 
-<!-- ── EDIT: hero image ── -->
+<!-- Hero Image -->
 <img
   class="hero-banner"
   src="./assets/holding.jpg"
-  alt="Activity 3 hero"
+  alt="Our future together"
   style="position:relative;z-index:1;"
   onerror="this.style.display='none';document.getElementById('hero-placeholder').style.display='flex';"
 />
-<div class="hero-banner-placeholder" id="hero-placeholder" style="display:none;position:relative;z-index:1;">🌙</div>
+<div class="hero-banner-placeholder" id="hero-placeholder" style="display:none;position:relative;z-index:1;height:300px;align-items:center;justify-content:center;font-size:4rem;background:linear-gradient(135deg,rgba(230,57,70,0.3),rgba(76,175,80,0.3));">🎨✨</div>
 
-<div style="max-width:860px;margin:0 auto;padding:0 1.5rem;position:relative;z-index:1;">
+<div style="max-width:920px;margin:0 auto;padding:0 1.5rem;position:relative;z-index:1;">
 
+  <!-- Nav -->
   <div style="padding:1.5rem 0 0;display:flex;align-items:center;gap:1rem;" class="fade-up">
-    <a href="index.html" class="back-btn">← Back</a>
-    <span style="font-size:0.8rem;color:rgba(255,248,248,0.4);letter-spacing:0.1em;">ACTIVITY 3 OF 3 · THE GRAND FINALE 🌙</span>
+    <a href="index.html" class="back-btn">← Back to Overview</a>
+    <span style="font-size:0.8rem;color:rgba(255,248,248,0.45);letter-spacing:0.12em;">ACTIVITY 3 OF 3 &bull; THE GRAND FINALE 🌙</span>
   </div>
 
+  <!-- Title block -->
   <div style="padding:2rem 0 1rem;" class="fade-up">
     <div class="section-label">The Grand Finale</div>
-    <!-- ── EDIT: main page title ── -->
-    <h1 class="page-title">Activity 3 Title 🌙</h1>
-    <!-- ── EDIT: tagline ── -->
-    <p style="margin-top:0.75rem;color:rgba(255,248,248,0.6);font-size:1.05rem;font-style:italic;">
-      Saving the best for last. ✨
+    <h1 class="page-title">Making Our Vision Board 🎨✨</h1>
+    <p style="margin-top:0.75rem;color:rgba(255,248,248,0.7);font-size:1.15rem;font-style:italic;">
+      dreaming up our future, side by side on Canva.
     </p>
   </div>
 
-  <div class="glass info-card fade-up" style="padding:1.8rem;margin-bottom:1.5rem;">
-    <div class="section-label">About This Activity</div>
-    <!-- ── EDIT: full description ── -->
+  <!-- Description card -->
+  <div class="glass info-card fade-up" style="padding:2rem;margin-bottom:1.8rem;">
+    <div class="section-label">What We're Doing</div>
     <p>
-      Write a full, heartfelt description of Activity 3 here — the grand finale of the whole day. Make her smile. 🌙❤️
+      For the grand finale of our date, we're opening up <strong>Canva</strong> together to build our very own <strong>Dream Vision Board</strong>! 🖼️
+      <br/><br/>
+      We'll gather aesthetic photos, crazy ideas, dream goals, and secret wishes — brainstorming everything from wild bucket list adventures we'd only do once together, to our future cozy home, dream pets, future kids' names, favorite cities to live in, dream rides, and the most futuristic smart home technology.
     </p>
+
+    <!-- Canva CTA Button -->
+    <div style="margin-top:1.5rem;display:flex;flex-wrap:wrap;gap:1rem;align-items:center;">
+      <a href="https://www.canva.com/create/vision-boards/" target="_blank" rel="noopener" class="link-btn link-btn-primary" id="canva-cta-btn">
+        🎨 Open Canva &amp; Start Our Board →
+      </a>
+      <span style="font-size:0.85rem;color:rgba(255,248,248,0.5);">Free &amp; easy on your laptop or tablet</span>
+    </div>
   </div>
 
-  <div class="glass info-card fade-up" style="padding:1.8rem;margin-bottom:1.5rem;">
-    <div class="section-label">The Details</div>
+  <!-- Details card -->
+  <div class="glass info-card fade-up" style="padding:1.8rem;margin-bottom:2rem;">
+    <div class="section-label">The Setup</div>
     <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:1.2rem;">
-      <!-- ── EDIT: each detail block ── -->
-      <div>
-        <h3>📅 Date & Time</h3>
-        <p>Saturday, [Month] [Day]<br/>[Start time] – [End time]</p>
-      </div>
       <div>
         <h3>📍 Location</h3>
-        <p>[Venue / Address]</p>
-      </div>
-      <div>
-        <h3>👗 What to Wear</h3>
-        <p>[Dress code or vibe]</p>
+        <p>Curled up together with our laptops 💻🛋️</p>
       </div>
       <div>
         <h3>💰 Cost</h3>
-        <p>Covered! / $[amount] each / Free</p>
+        <p>100% Free on Canva ✨</p>
+      </div>
+      <div>
+        <h3>⏱️ Time</h3>
+        <p>Take as long as we want — no rush 🌙</p>
+      </div>
+      <div>
+        <h3>👗 What to Wear</h3>
+        <p>The coziest loungewear or PJs 🧦</p>
       </div>
     </div>
   </div>
 
-  <div class="glass info-card fade-up" style="padding:1.8rem;margin-bottom:1.5rem;">
-    <div class="section-label">Good to Know</div>
-    <!-- ── EDIT: bullet notes ── -->
-    <ul>
-      <li>Tip or note 1</li>
-      <li>Tip or note 2</li>
-      <li>Tip or note 3</li>
-    </ul>
-  </div>
+  <!-- VISION BOARD CATEGORIES & INSPIRATION -->
+  <div class="fade-up" style="margin-bottom:2.5rem;">
+    <div class="section-label" style="margin-bottom:0.4rem;">Things to Put on Our Board 📌</div>
+    <h2 style="font-family:var(--font-heading);font-size:1.8rem;margin-bottom:1.2rem;">Our Dream Blueprint</h2>
 
-  <div class="fade-up" style="margin-bottom:2rem;">
-    <div class="section-label" style="margin-bottom:0.75rem;">Useful Links</div>
-    <div style="display:flex;flex-wrap:wrap;gap:0.75rem;align-items:center;">
-      <!-- ── EDIT: set href and label ── -->
-      <a href="#" target="_blank" rel="noopener" class="link-btn link-btn-primary">🔗 Main Link</a>
-      <a href="#" target="_blank" rel="noopener" class="link-btn link-btn-secondary">📍 Google Maps</a>
-      <a href="#" target="_blank" rel="noopener" class="link-btn link-btn-secondary">🎟️ Tickets / Booking</a>
+    <div class="idea-grid">
+
+      <!-- 1. Things We'd Only Try Once (Together) -->
+      <div class="idea-card">
+        <div class="idea-card-header">
+          <div class="idea-icon">🪂</div>
+          <div class="idea-title">Only Try Once (Together!)</div>
+        </div>
+        <ul class="idea-list">
+          <li>Tandem skydiving over Interlaken or Hawaii</li>
+          <li>Zero-gravity vomit comet parabolic flight 🚀</li>
+          <li>A 3-star Michelin secret blind-tasting dinner</li>
+          <li>Staying in an underwater glass aquarium suite</li>
+          <li>Bungee jumping off a scenic canyon bridge</li>
+          <li>A polar plunge followed by geothermal hot springs ❄️♨️</li>
+        </ul>
+      </div>
+
+      <!-- 2. Future Dream Home -->
+      <div class="idea-card">
+        <div class="idea-card-header">
+          <div class="idea-icon">🏡</div>
+          <div class="idea-title">Our Future Home</div>
+        </div>
+        <ul class="idea-list">
+          <li>Floor-to-ceiling panoramic glass windows</li>
+          <li>Sunken conversation pit with ambient fireplace</li>
+          <li>Wrap-around redwood deck with a scenic view 🌲</li>
+          <li>Massive open-concept kitchen with an espresso bar</li>
+          <li>Cozy private library reading nook with warm lighting</li>
+          <li>Dedicated home theater with Dolby Atmos sound 🍿</li>
+        </ul>
+      </div>
+
+      <!-- 3. Pets -->
+      <div class="idea-card">
+        <div class="idea-card-header">
+          <div class="idea-icon">🐾</div>
+          <div class="idea-title">Our Furry Companions</div>
+        </div>
+        <ul class="idea-list">
+          <li>A fluffy Golden Retriever or Samoyed puppy 🐕</li>
+          <li>A sweet rescue kitten to curl up with on the sofa</li>
+          <li>A goofy French Bulldog or playful Shiba Inu</li>
+          <li>Funny pet nicknames only the two of us understand</li>
+          <li>A custom dog bath station in the mudroom 🛁</li>
+        </ul>
+      </div>
+
+      <!-- 4. Kids & Names -->
+      <div class="idea-card">
+        <div class="idea-card-header">
+          <div class="idea-icon">👶</div>
+          <div class="idea-title">Kids &amp; Baby Names</div>
+        </div>
+        <ul class="idea-list">
+          <li>Favorite boy names: <em>Leo, Kai, Rowan, Lucas, Noah</em></li>
+          <li>Favorite girl names: <em>Maya, Mila, Chloe, Elena, Aria</em></li>
+          <li>Bedtime stories, weekend pancake breakfasts 🥞</li>
+          <li>Passing down our favorite anime, video games &amp; songs</li>
+          <li>Family road trips and building treehouses</li>
+        </ul>
+      </div>
+
+      <!-- 5. Cities & Places to Live -->
+      <div class="idea-card">
+        <div class="idea-card-header">
+          <div class="idea-icon">🌆</div>
+          <div class="idea-title">Dream Cities &amp; Travel</div>
+        </div>
+        <ul class="idea-list">
+          <li>Wandering late-night Tokyo neon streets 🇯🇵</li>
+          <li>Scenic peaceful villa near Lake Como, Italy 🇮🇹</li>
+          <li>Pacific Northwest vibes: Seattle or Vancouver 🌲</li>
+          <li>A modern penthouse overlook in New York or London</li>
+          <li>Quiet coastal retreats with ocean breeze 🌊</li>
+        </ul>
+      </div>
+
+      <!-- 6. Dream Cars -->
+      <div class="idea-card">
+        <div class="idea-card-header">
+          <div class="idea-icon">🏎️</div>
+          <div class="idea-title">Dream Cars &amp; Drives</div>
+        </div>
+        <ul class="idea-list">
+          <li>Porsche 911 GT3 or sleek electric Taycan ⚡</li>
+          <li>Adventure-ready Rivian R1S for scenic camping</li>
+          <li>Vintage convertible for coastal Highway 1 drives 🕶️</li>
+          <li>High-speed acceleration and custom interior lighting</li>
+          <li>Epic road trips with our favorite playlist blasting</li>
+        </ul>
+      </div>
+
+      <!-- 7. Cutting-Edge Tech -->
+      <div class="idea-card">
+        <div class="idea-card-header">
+          <div class="idea-icon">🤖</div>
+          <div class="idea-title">Tech &amp; Battlestations</div>
+        </div>
+        <ul class="idea-list">
+          <li>Side-by-side custom dual PC dream desks 🖥️🖥️</li>
+          <li>Ultra-wide OLED curved monitors with ambient bias lighting</li>
+          <li>Next-gen lightweight AR smart glasses 👓</li>
+          <li>Laser 4K ultra-short-throw home cinema projector</li>
+          <li>Custom tactile mechanical keyboards with artisan caps</li>
+        </ul>
+      </div>
+
+      <!-- 8. Smart Household Technology -->
+      <div class="idea-card">
+        <div class="idea-card-header">
+          <div class="idea-icon">💡</div>
+          <div class="idea-title">Household Technology</div>
+        </div>
+        <ul class="idea-list">
+          <li>Fully automated smart motorized blackout shades</li>
+          <li>Philips Hue whole-home ambient lighting scenes</li>
+          <li>Robotic vacuum &amp; mop with self-cleaning dock 🧹</li>
+          <li>Smart heated bathroom floors on winter mornings ♨️</li>
+          <li>Dual-zone temperature regulated smart mattress</li>
+          <li>Biometric keyless front door entry &amp; smart security</li>
+        </ul>
+      </div>
+
     </div>
   </div>
 
-  <div class="fade-up" style="margin-bottom:2rem;">
-    <div class="section-label" style="margin-bottom:0.75rem;">Photos</div>
-    <div class="photo-grid" id="photo-grid">
-      <!-- ── EDIT: swap / add photos ── -->
-      <img src="./assets/9.jpg"  alt="photo" />
-      <img src="./assets/10.jpg" alt="photo" />
-      <img src="./assets/11.jpg" alt="photo" />
-    </div>
-  </div>
-
-  <!-- Big love note for the finale -->
-  <div class="glass fade-up" style="padding:2.5rem 2rem;margin-bottom:2rem;text-align:center;border-color:rgba(230,57,70,0.4);background:linear-gradient(135deg,rgba(230,57,70,0.1),rgba(76,175,80,0.1));">
-    <div style="font-size:3rem;margin-bottom:0.75rem;">❤️🌙</div>
-    <!-- ── EDIT: big finale love note ── -->
-    <p style="font-family:var(--font-heading);font-style:italic;font-size:1.25rem;color:rgba(255,248,248,0.9);line-height:1.9;max-width:560px;margin:0 auto;">
-      "This is the part where you write the most heartfelt message of all three pages. The grand finale. The thing that makes her go 'aww'. You've got this. 💌"
+  <!-- Interactive Idea Sparker -->
+  <div class="glass fade-up" style="padding:2rem;margin-bottom:2.5rem;text-align:center;">
+    <div class="section-label" style="margin-bottom:0.3rem;">Need Inspiration? 🎲</div>
+    <h3 style="font-family:var(--font-heading);font-size:1.5rem;margin-bottom:0.6rem;">Random Vision Board Sparker</h3>
+    <p style="font-size:0.9rem;color:rgba(255,248,248,0.6);margin-bottom:1.2rem;">
+      Click the button to generate a fun, unexpected question for us to answer on our board!
     </p>
+
+    <div id="spark-box" style="
+      background:rgba(0,0,0,0.3);
+      border:1px dashed rgba(230,57,70,0.4);
+      border-radius:1rem;
+      padding:1.4rem;
+      font-family:var(--font-heading);
+      font-size:1.2rem;
+      color:var(--color-gold);
+      min-height:4.5rem;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      margin-bottom:1.2rem;
+      transition:all 0.3s ease;
+    ">
+      ✨ Tap below to reveal our first vision question!
+    </div>
+
+    <button id="spark-btn" style="
+      padding:0.75rem 2.2rem;
+      border-radius:999px;
+      border:none;
+      background:linear-gradient(135deg,var(--color-accent),var(--color-accent2));
+      color:white;
+      font-size:1rem;
+      font-weight:700;
+      cursor:pointer;
+      box-shadow:0 4px 18px rgba(230,57,70,0.4);
+      transition:transform 0.2s,box-shadow 0.2s;
+    ">🎲 Give Us a Prompt!</button>
   </div>
 
-  <div style="display:flex;justify-content:flex-start;margin-bottom:3rem;" class="fade-up">
-    <a href="activity2.html" class="back-btn">← Activity 2 🍽️</a>
+  <!-- Memory Photos -->
+  <div class="fade-up" style="margin-bottom:2.5rem;">
+    <div class="section-label" style="margin-bottom:0.75rem;">Building Memories Along the Way 📸</div>
+    <div class="photo-grid" id="photo-grid">
+      <img src="./assets/9.jpg"  alt="memory 9" />
+      <img src="./assets/10.jpg" alt="memory 10" />
+      <img src="./assets/11.jpg" alt="memory 11" />
+    </div>
+  </div>
+
+  <!-- Grand Finale Love Note -->
+  <div class="glass fade-up" style="padding:2.8rem 2rem;margin-bottom:2.5rem;text-align:center;border-color:rgba(230,57,70,0.4);background:linear-gradient(135deg,rgba(230,57,70,0.12),rgba(76,175,80,0.12));box-shadow:0 15px 50px rgba(0,0,0,0.4);">
+    <div style="font-size:3.5rem;margin-bottom:0.6rem;">❤️✨🌙</div>
+    <div class="section-label" style="margin-bottom:0.5rem;">To Sahil, with all my love</div>
+    <p style="font-family:var(--font-heading);font-style:italic;font-size:1.35rem;color:rgba(255,248,248,0.95);line-height:1.9;max-width:620px;margin:0 auto 1.5rem;">
+      "No matter what houses we live in, what cities we explore, or what adventures we chase — my favorite place in the entire world will always be right next to you. Here's to building our forever, one dream at a time. 💌"
+    </p>
+    <a href="index.html#proposal" class="back-btn" style="background:rgba(230,57,70,0.25);border-color:var(--color-accent);font-size:1rem;padding:0.75rem 2rem;">
+      Take Me to the Final Question 💍
+    </a>
+  </div>
+
+  <!-- Bottom Nav -->
+  <div style="display:flex;justify-content:flex-start;margin-bottom:2rem;" class="fade-up">
+    <a href="activity2.html" class="back-btn">← Activity 2: Movie Night 🎬</a>
   </div>
 
 </div>
 
 <script>
-  // Sparkles
+  // Sparkle floating particles
   const bg = document.getElementById("sparkle-bg");
   const colors = ["#e63946","#4caf50","#fff8f8","#fbbf24"];
-  for (let i = 0; i < 30; i++) {
+  for (let i = 0; i < 35; i++) {
     const s = document.createElement("div");
     s.className = "sparkle";
     s.style.left   = Math.random() * 100 + "vw";
@@ -346,10 +567,58 @@
   });
   lb.addEventListener("click", e => { if (e.target !== lbImg) lb.classList.remove("open"); });
 
+  // Confetti on Canva CTA click
+  document.getElementById("canva-cta-btn").addEventListener("click", () => {
+    confetti({
+      particleCount: 70,
+      spread: 70,
+      origin: { y: 0.7 },
+      colors: ['#e63946', '#4caf50', '#fbbf24', '#ffffff']
+    });
+  });
+
+  // Random Prompt Generator
+  const PROMPTS = [
+    "🪂 What is one wild, crazy adventure you'd be willing to try JUST ONCE with me?",
+    "🏡 Describe our ideal morning in our dream house: where are we sitting, and what's in our mugs?",
+    "🐾 If we could adopt any pet tomorrow, what would their name and personality be?",
+    "👶 What is your all-time favorite boy and girl name for our future kids?",
+    "🌆 If we could live in any city in the world for 1 year together, where are we moving?",
+    "🏎️ What car are we taking on our ultimate dream road trip along the coast?",
+    "🤖 What futuristic smart home gadget must our future kitchen or living room have?",
+    "☕ What will our dream couple's Sunday routine look like 5 years from now?",
+    "✈️ If money was no object, what's the very first trip we are booking on Canva right now?"
+  ];
+
+  let lastIndex = -1;
+  const sparkBox = document.getElementById("spark-box");
+  document.getElementById("spark-btn").addEventListener("click", () => {
+    let newIndex;
+    do {
+      newIndex = Math.floor(Math.random() * PROMPTS.length);
+    } while (newIndex === lastIndex);
+    lastIndex = newIndex;
+
+    sparkBox.style.opacity = "0";
+    sparkBox.style.transform = "scale(0.95)";
+    setTimeout(() => {
+      sparkBox.textContent = PROMPTS[newIndex];
+      sparkBox.style.opacity = "1";
+      sparkBox.style.transform = "scale(1)";
+    }, 200);
+
+    confetti({
+      particleCount: 35,
+      spread: 50,
+      origin: { y: 0.8 },
+      colors: ['#4caf50', '#e63946', '#fbbf24']
+    });
+  });
+
   // Scroll fade-up
   const obs = new IntersectionObserver(entries => {
     entries.forEach(e => { if (e.isIntersecting) e.target.classList.add("visible"); });
-  }, { threshold: 0.12 });
+  }, { threshold: 0.08 });
   document.querySelectorAll(".fade-up").forEach(el => obs.observe(el));
 </script>
 </body>
