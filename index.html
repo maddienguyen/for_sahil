@@ -688,8 +688,8 @@
      MUSIC PILL  (hidden until splash is dismissed)
 ============================================================ -->
 <div id="music-pill">
-  <span style="font-size:1rem;">🎵</span>
-  <button class="pill-btn" id="play-pause-btn" title="Play / Pause">⏸️</button>
+  <span style="font-size:1rem;">✨</span>
+  <button class="pill-btn" id="play-pause-btn" title="Play / Pause">❚❚</button>
   <input type="range" id="vol-slider" min="0" max="1" step="0.01" value="0.4" title="Volume" />
   <audio id="bg-audio" loop>
     <!-- ── EDIT: swap the audio file path here ── -->
@@ -716,7 +716,7 @@
 
   <!-- ── PHOTO STRIP ── -->
   <section id="photo-strip" class="fade-in-section">
-    <div class="section-heading" style="margin-bottom:1.5rem;">Our Memories 📸</div>
+    <div class="section-heading" style="margin-bottom:1.5rem;">Our Memories ✨</div>
     <!-- strip-track duplicated by JS for seamless loop -->
     <div class="strip-track" id="strip-track"></div>
   </section>
@@ -724,7 +724,7 @@
   <!-- ── VIDEO SECTION ── -->
   <section id="video-section" class="fade-in-section">
     <!-- ── EDIT: video section heading ── -->
-    <div class="section-heading" style="margin-bottom:0.5rem;">Watch This 🎬</div>
+    <div class="section-heading" style="margin-bottom:0.5rem;">Watch This ✨</div>
     <div class="section-sub">a little something to set the mood</div>
 
     <div class="glass" style="padding:1.2rem;">
@@ -743,7 +743,7 @@
 
       <!-- ── EDIT: button label ── -->
       <button id="music-toggle-btn">
-        <span id="music-toggle-icon">🎵</span>
+        <span id="music-toggle-icon">✨</span>
         Pause Background Music for Video
       </button>
     </div>
@@ -752,7 +752,7 @@
   <!-- ── ITINERARY SECTION ── -->
   <section id="itinerary" class="fade-in-section">
     <!-- ── EDIT: itinerary section heading ── -->
-    <div class="section-heading">What We're Doing 🗓️</div>
+    <div class="section-heading">What We're Doing ✨</div>
     <div class="section-sub">tap a card to open the details</div>
 
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6" id="itinerary-grid">
@@ -763,11 +763,11 @@
   <!-- ── PROPOSAL SECTION ── -->
   <section id="proposal" class="fade-in-section">
     <div id="proposal-card" class="glass">
-      <div style="font-size:3rem;margin-bottom:0.5rem;">💍</div>
+      <div style="font-size:3rem;margin-bottom:0.5rem;">❤️</div>
       <!-- ── EDIT: proposal question ── -->
       <h2>Will you be my date?</h2>
       <!-- ── EDIT: proposal sub-text ── -->
-      <p>No pressure… but also, please say yes. 🥺</p>
+      <p>No pressure… but also, please say yes. ❤️</p>
 
       <div class="proposal-btns" id="proposal-btns-container">
         <!-- ── EDIT: Yes button label ── -->
@@ -798,7 +798,7 @@
 
     <!-- ── EDIT: love note message (HTML allowed) ── -->
     <p>
-      I knew you'd say yes 😍<br/><br/>
+      I knew you'd say yes 💕<br/><br/>
       You mean the entire world to me. Every moment with you feels like magic, and I can't wait to make even more memories together.<br/><br/>
       I love you more than words can say. 💌
     </p>
@@ -822,12 +822,12 @@ const heroTitleText = "Forever & Always";
 // Polaroid photos + captions
 // Add or remove objects to change photos. The src is relative to index.html.
 const polaroidConfig = [
-  { src: "./assets/1.jpg",  caption: "us 🥰"      },
+  { src: "./assets/1.jpg",  caption: "us ❤️"      },
   { src: "./assets/2.jpg",  caption: "💕"          },
   { src: "./assets/3.jpg",  caption: "forever ✨"  },
-  { src: "./assets/4.PNG",  caption: "my fav 🌸"   },
-  { src: "./assets/5.jpg",  caption: "golden ☀️"  },
-  { src: "./assets/6.jpg",  caption: "& always 💫" },
+  { src: "./assets/4.PNG",  caption: "my fav 💖"   },
+  { src: "./assets/5.jpg",  caption: "golden ✨"  },
+  { src: "./assets/6.jpg",  caption: "& always 💌" },
 ];
 
 // All photos for the scrolling strip (order freely)
@@ -850,15 +850,15 @@ const stripPhotos = [
 // EDIT: front { icon, title, hint } and page { href }
 const itineraryData = [
   {
-    front: { icon: "🎮", title: "Spin the Wheel 😱", hint: "who plays the horror game?" },
+    front: { icon: "❤️", title: "Spin the Wheel", hint: "who plays the horror game?" },
     page: "activity1.html"
   },
   {
-    front: { icon: "🎬", title: "Movie Night 🍿", hint: "100 movies + fate wheel" },
+    front: { icon: "💖", title: "Movie Night", hint: "100 movies + fate wheel" },
     page: "activity2.html?v=3"
   },
   {
-    front: { icon: "🎨", title: "Vision Board on Canva ✨", hint: "dreaming up our future" },
+    front: { icon: "✨", title: "Vision Board on Canva ✨", hint: "dreaming up our future" },
     page: "activity3.html?v=4"
   },
 ];
@@ -916,7 +916,7 @@ const NO_BTN_DODGE_RADIUS = 90;
 ──────────────────────────────────────────────────────────────── */
 (function spawnSplashHearts() {
   const splash = document.getElementById("splash");
-  const heartEmojis = ["❤️","💖","💗","💓","💞","💕","🌸","✨"];
+  const heartEmojis = ["❤️","💖","💗","💓","💞","💕","✨"];
   for (let i = 0; i < 18; i++) {
     const h = document.createElement("span");
     h.classList.add("splash-heart");
@@ -974,10 +974,10 @@ const volSlider    = document.getElementById("vol-slider");
 playPauseBtn.addEventListener("click", () => {
   if (bgAudio.paused) {
     bgAudio.play();
-    playPauseBtn.textContent = "⏸️";
+    playPauseBtn.textContent = "❚❚";
   } else {
     bgAudio.pause();
-    playPauseBtn.textContent = "▶️";
+    playPauseBtn.textContent = "▶";
   }
 });
 
@@ -994,16 +994,16 @@ document.getElementById("music-toggle-btn").addEventListener("click", function (
 
   if (musicPausedForVideo) {
     bgAudio.pause();
-    playPauseBtn.textContent = "▶️";
+    playPauseBtn.textContent = "▶";
     this.textContent = "";
-    icon.textContent = "🔇";
+    icon.textContent = "✨";
     this.appendChild(icon);
     this.append(" Resume Background Music");
   } else {
     bgAudio.play();
-    playPauseBtn.textContent = "⏸️";
+    playPauseBtn.textContent = "❚❚";
     this.textContent = "";
-    icon.textContent = "🎵";
+    icon.textContent = "✨";
     this.appendChild(icon);
     this.append(" Pause Background Music for Video");
   }
