@@ -200,7 +200,7 @@
   alt="Activity 1 hero"
   onerror="this.style.display='none';document.getElementById('hero-placeholder').style.display='flex';"
 />
-<div class="hero-banner-placeholder" id="hero-placeholder" style="display:none;">🌹</div>
+<div class="hero-banner-placeholder" id="hero-placeholder" style="display:none;">🎮</div>
 
 <div style="max-width:860px;margin:0 auto;padding:0 1.5rem;">
 
@@ -208,101 +208,137 @@
   <div style="padding:1.5rem 0 0;display:flex;align-items:center;gap:1rem;" class="fade-up">
     <a href="index.html" class="back-btn">← Back</a>
     <!-- ── EDIT: activity badge emoji & label ── -->
-    <span style="font-size:0.8rem;color:rgba(255,248,248,0.4);letter-spacing:0.1em;">ACTIVITY 1 OF 3</span>
-  </div>
+    <span style="font-size:0.8rem;color:rgba(255,248,248,0.4);letter-spacing:0.1em;">ACTIVITY 1 OF 3</span>  </div>
 
   <!-- Title block -->
   <div style="padding:2rem 0 1rem;" class="fade-up">
     <div class="section-label">What We're Doing</div>
-    <!-- ── EDIT: main page title ── -->
-    <h1 class="page-title">Activity 1 Title 🌹</h1>
-    <!-- ── EDIT: tagline / short description ── -->
+    <h1 class="page-title">Spin the Wheel 🎡😱</h1>
     <p style="margin-top:0.75rem;color:rgba(255,248,248,0.6);font-size:1.05rem;font-style:italic;">
-      A short romantic tagline goes here.
+      fate decides who gets punished tonight.
     </p>
   </div>
 
   <!-- Description card -->
   <div class="glass info-card fade-up" style="padding:1.8rem;margin-bottom:1.5rem;">
     <div class="section-label">About This Activity</div>
-    <!-- ── EDIT: full description — use <p> and <br> freely ── -->
     <p>
-      Write a full, heartfelt description of Activity 1 here. Tell her what you're doing, why you chose it, and what makes it special. You can write as much as you like — this is your space. 💕
+      Play a fun game to see who is punished on the wheel. Two options, one fate — either Maddie plays a horror game while Sahil watches and laughs, or Sahil plays a horror game while Maddie watches and laughs. Spin the wheel and accept your destiny. No take-backs. 🎃👻
     </p>
   </div>
 
-  <!-- Details card: time, location, what to wear, etc. -->
+  <!-- SPIN THE WHEEL widget -->
+  <div class="glass fade-up" style="padding:2rem;margin-bottom:1.5rem;text-align:center;">
+    <div class="section-label" style="margin-bottom:1rem;">Spin to Decide Your Fate 🎡</div>
+
+    <div style="position:relative;display:inline-block;margin-bottom:1.5rem;">
+      <!-- Pointer arrow -->
+      <div id="wheel-pointer" style="
+        position:absolute;
+        top:-18px;
+        left:50%;
+        transform:translateX(-50%);
+        font-size:2rem;
+        z-index:10;
+        filter:drop-shadow(0 2px 4px rgba(0,0,0,0.5));
+      ">▼</div>
+      <canvas id="spin-wheel" width="300" height="300" style="border-radius:50%;cursor:pointer;display:block;box-shadow:0 8px 40px rgba(0,0,0,0.5);"></canvas>
+    </div>
+
+    <div>
+      <button id="spin-btn" style="
+        padding:0.8rem 2.5rem;
+        border-radius:999px;
+        border:none;
+        background:linear-gradient(135deg,#e63946,#4caf50);
+        color:white;
+        font-size:1.1rem;
+        font-family:var(--font-heading);
+        cursor:pointer;
+        box-shadow:0 4px 20px rgba(230,57,70,0.4);
+        transition:transform 0.2s,box-shadow 0.2s;
+        letter-spacing:0.03em;
+      ">🎡 SPIN!</button>
+    </div>
+
+    <div id="spin-result" style="
+      margin-top:1.2rem;
+      font-family:var(--font-heading);
+      font-size:1.3rem;
+      color:var(--color-text);
+      min-height:2rem;
+      transition:all 0.3s;
+    "></div>
+  </div>
+
+  <!-- Details card -->
   <div class="glass info-card fade-up" style="padding:1.8rem;margin-bottom:1.5rem;">
     <div class="section-label">The Details</div>
     <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:1.2rem;">
 
-      <!-- ── EDIT: each detail block below ── -->
-      <div>
-        <h3>📅 Date & Time</h3>
-        <p>Saturday, [Month] [Day]<br/>[Start time] – [End time]</p>
-      </div>
-
       <div>
         <h3>📍 Location</h3>
-        <p>[Venue / Address]</p>
+        <p>Comfort of your own home 🏠</p>
       </div>
 
       <div>
         <h3>👗 What to Wear</h3>
-        <p>[Dress code or vibe, e.g. "Casual chic ✨"]</p>
+        <p>PJs only 🩴🌙</p>
       </div>
 
       <div>
         <h3>💰 Cost</h3>
-        <p>Covered! / $[amount] each / Free</p>
+        <p>Whatever Maddie buys 💸</p>
+      </div>
+
+      <div>
+        <h3>🎮 The Game</h3>
+        <p>Pick from the existing library — or Maddie will provide a horror game if none of the ones already there are good enough.</p>
       </div>
 
     </div>
   </div>
 
-  <!-- What to bring / notes -->
+  <!-- Good to know -->
   <div class="glass info-card fade-up" style="padding:1.8rem;margin-bottom:1.5rem;">
     <div class="section-label">Good to Know</div>
-    <!-- ── EDIT: bullet list ── -->
     <ul>
-      <li>Tip or note 1 — e.g. "Bring a jacket, it might be chilly"</li>
-      <li>Tip or note 2 — e.g. "Parking is free on [street]"</li>
-      <li>Tip or note 3 — e.g. "Reservations are confirmed ✅"</li>
+      <li>🎮 Maddie will supply a horror game if the current library doesn't have the best options</li>
+      <li>😈 The wheel's decision is final — no switching, no negotiating</li>
+      <li>👀 The watcher is required to react dramatically at all times</li>
+      <li>🛋️ Get cozy — this is a full pajama situation</li>
     </ul>
   </div>
 
-  <!-- Links section -->
+  <!-- The two choices cards -->
   <div class="fade-up" style="margin-bottom:2rem;">
-    <div class="section-label" style="margin-bottom:0.75rem;">Useful Links</div>
-    <div style="display:flex;flex-wrap:wrap;gap:0.75rem;align-items:center;">
-      <!-- ── EDIT: add/remove link buttons — set href and label ── -->
-      <a href="#" target="_blank" rel="noopener" class="link-btn link-btn-primary">🔗 Main Link</a>
-      <a href="#" target="_blank" rel="noopener" class="link-btn link-btn-secondary">📍 Google Maps</a>
-      <a href="#" target="_blank" rel="noopener" class="link-btn link-btn-secondary">🎟️ Tickets / Booking</a>
+    <div class="section-label" style="margin-bottom:0.75rem;">The Two Fates 🎃</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+
+      <div class="glass" style="padding:1.5rem;text-align:center;border-color:rgba(230,57,70,0.4);background:rgba(230,57,70,0.1);">
+        <div style="font-size:2.5rem;margin-bottom:0.5rem;">👾</div>
+        <h3 style="font-family:var(--font-heading);font-size:1rem;margin-bottom:0.4rem;">Option 1</h3>
+        <p style="font-size:0.9rem;color:rgba(255,248,248,0.75);">Maddie plays the horror game while Sahil watches 😈</p>
+      </div>
+
+      <div class="glass" style="padding:1.5rem;text-align:center;border-color:rgba(76,175,80,0.4);background:rgba(76,175,80,0.1);">
+        <div style="font-size:2.5rem;margin-bottom:0.5rem;">🕹️</div>
+        <h3 style="font-family:var(--font-heading);font-size:1rem;margin-bottom:0.4rem;">Option 2</h3>
+        <p style="font-size:0.9rem;color:rgba(255,248,248,0.75);">Sahil plays the horror game while Maddie watches 😈</p>
+      </div>
+
     </div>
   </div>
 
-  <!-- Photo grid -->
-  <div class="fade-up" style="margin-bottom:2rem;">
-    <div class="section-label" style="margin-bottom:0.75rem;">Photos</div>
-    <div class="photo-grid" id="photo-grid">
-      <!-- ── EDIT: add <img> tags below, or remove this whole block if you don't need it ── -->
-      <img src="./assets/2.jpg"  alt="photo" />
-      <img src="./assets/3.jpg"  alt="photo" />
-      <img src="./assets/4.PNG"  alt="photo" />
-    </div>
-  </div>
-
-  <!-- Love note (optional) -->
+  <!-- Love note -->
   <div class="glass fade-up" style="padding:1.8rem;margin-bottom:2rem;text-align:center;border-color:rgba(230,57,70,0.3);">
-    <div style="font-size:2rem;margin-bottom:0.5rem;">💌</div>
-    <!-- ── EDIT: personal message ── -->
+    <div style="font-size:2rem;margin-bottom:0.5rem;">👻💌</div>
     <p style="font-family:var(--font-heading);font-style:italic;font-size:1.1rem;color:rgba(255,248,248,0.85);line-height:1.8;">
-      "Write a sweet personal note here — something that tells her why this activity means something to you."
+      "No matter who the wheel picks, we're both winning — because we get to be scared together. 🖤"
     </p>
   </div>
 
-  <!-- Next activity teaser -->
+  <!-- Next activity -->
   <div style="display:flex;justify-content:flex-end;margin-bottom:3rem;" class="fade-up">
     <a href="activity2.html" class="back-btn" style="background:rgba(230,57,70,0.15);border-color:rgba(230,57,70,0.4);">
       Next Activity → 🍽️
@@ -313,15 +349,9 @@
 
 <!-- Lightbox script -->
 <script>
+  // Lightbox
   const lb    = document.getElementById("lightbox");
   const lbImg = document.getElementById("lightbox-img");
-
-  document.getElementById("photo-grid").querySelectorAll("img").forEach(img => {
-    img.addEventListener("click", () => {
-      lbImg.src = img.src;
-      lb.classList.add("open");
-    });
-  });
 
   lb.addEventListener("click", e => {
     if (e.target !== lbImg) lb.classList.remove("open");
@@ -332,6 +362,120 @@
     entries.forEach(e => { if (e.isIntersecting) e.target.classList.add("visible"); });
   }, { threshold: 0.12 });
   document.querySelectorAll(".fade-up").forEach(el => obs.observe(el));
+
+  /* ── SPIN THE WHEEL ── */
+  (function initWheel() {
+    const canvas  = document.getElementById("spin-wheel");
+    const ctx     = canvas.getContext("2d");
+    const spinBtn = document.getElementById("spin-btn");
+    const result  = document.getElementById("spin-result");
+
+    // ── EDIT: wheel segments ──
+    const segments = [
+      { label: "Maddie plays 👾", color: "#e63946" },
+      { label: "Sahil plays 🕹️",  color: "#4caf50" },
+    ];
+
+    const NUM   = segments.length;
+    const ARC   = (2 * Math.PI) / NUM;
+    const CX    = canvas.width  / 2;
+    const CY    = canvas.height / 2;
+    const R     = CX - 8;
+
+    let currentAngle = 0;
+    let spinning     = false;
+
+    function drawWheel(angle) {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      segments.forEach((seg, i) => {
+        const start = angle + i * ARC;
+        const end   = start + ARC;
+
+        // slice
+        ctx.beginPath();
+        ctx.moveTo(CX, CY);
+        ctx.arc(CX, CY, R, start, end);
+        ctx.closePath();
+        ctx.fillStyle = seg.color;
+        ctx.fill();
+        ctx.strokeStyle = "rgba(255,255,255,0.25)";
+        ctx.lineWidth   = 2;
+        ctx.stroke();
+
+        // text
+        ctx.save();
+        ctx.translate(CX, CY);
+        ctx.rotate(start + ARC / 2);
+        ctx.textAlign    = "right";
+        ctx.fillStyle    = "#fff";
+        ctx.font         = `bold ${NUM <= 4 ? 18 : 13}px 'Lato', sans-serif`;
+        ctx.shadowColor  = "rgba(0,0,0,0.5)";
+        ctx.shadowBlur   = 4;
+        ctx.fillText(seg.label, R - 14, 6);
+        ctx.restore();
+      });
+
+      // center circle
+      ctx.beginPath();
+      ctx.arc(CX, CY, 22, 0, 2 * Math.PI);
+      ctx.fillStyle = "#1a0005";
+      ctx.fill();
+      ctx.strokeStyle = "rgba(255,255,255,0.3)";
+      ctx.lineWidth = 2;
+      ctx.stroke();
+
+      // center emoji
+      ctx.font      = "18px serif";
+      ctx.textAlign = "center";
+      ctx.fillStyle = "#fff";
+      ctx.fillText("🎡", CX, CY + 7);
+    }
+
+    drawWheel(currentAngle);
+
+    spinBtn.addEventListener("click", () => {
+      if (spinning) return;
+      spinning = true;
+      result.textContent = "";
+      spinBtn.disabled   = true;
+      spinBtn.style.opacity = "0.5";
+
+      // random extra rotations + landing angle
+      const extraSpins  = 5 + Math.floor(Math.random() * 5);       // 5-9 full spins
+      const landSlice   = Math.floor(Math.random() * NUM);           // which segment wins
+      const landAngle   = -(landSlice * ARC + ARC / 2);             // point that segment to top
+      const totalAngle  = extraSpins * 2 * Math.PI + landAngle - (currentAngle % (2 * Math.PI));
+
+      const duration = 4000 + Math.random() * 1500; // ms
+      const start    = performance.now();
+      const startA   = currentAngle;
+
+      function easeOut(t) { return 1 - Math.pow(1 - t, 4); }
+
+      function frame(now) {
+        const elapsed = now - start;
+        const t       = Math.min(elapsed / duration, 1);
+        currentAngle  = startA + totalAngle * easeOut(t);
+        drawWheel(currentAngle);
+
+        if (t < 1) {
+          requestAnimationFrame(frame);
+        } else {
+          spinning = false;
+          spinBtn.disabled  = false;
+          spinBtn.style.opacity = "1";
+
+          // figure out which segment is at the top (pointer at 270° = -π/2 from 0)
+          const normalized = (((-currentAngle) % (2 * Math.PI)) + 2 * Math.PI) % (2 * Math.PI);
+          const winner     = Math.floor(normalized / ARC) % NUM;
+          result.innerHTML = `🎉 <strong>${segments[winner].label}</strong> — fate has spoken!`;
+        }
+      }
+
+      requestAnimationFrame(frame);
+    });
+  })();
 </script>
 </body>
 </html>
