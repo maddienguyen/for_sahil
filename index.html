@@ -1,0 +1,1372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Forever & Always 💌</title>
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- GSAP CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+
+  <!-- canvas-confetti CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Lato:wght@300;400&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ============================================================
+       GLOBAL & RESET
+    ============================================================ */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      /* ── EDIT THESE COLOURS TO RETHEME THE WHOLE PAGE ── */
+      --color-bg-from: #1a0005;
+      --color-bg-to:   #0a2200;
+      --color-accent:  #e63946;
+      --color-accent2: #4caf50;
+      --color-gold:    #a8e063;
+      --color-text:    #fff8f8;
+      --font-heading:  'Playfair Display', serif;
+      --font-body:     'Lato', sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--font-body);
+      background: linear-gradient(135deg, var(--color-bg-from) 0%, var(--color-bg-to) 100%);
+      color: var(--color-text);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ── Shared glass card ── */
+    .glass {
+      background: rgba(255, 255, 255, 0.07);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 1.5rem;
+    }
+
+    /* ============================================================
+       STAR BACKGROUND
+    ============================================================ */
+    #star-canvas {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    /* ============================================================
+       ENTRY SPLASH OVERLAY
+    ============================================================ */
+    #splash {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      /* ── EDIT: splash background ── */
+      background: radial-gradient(ellipse at center, #2d0a0a 0%, #001400 100%);
+      text-align: center;
+      padding: 2rem;
+    }
+
+    .splash-title {
+      font-family: var(--font-heading);
+      font-size: clamp(2rem, 6vw, 4rem);
+      color: var(--color-text);
+      margin-bottom: 0.5rem;
+      /* animated glow */
+      text-shadow: 0 0 20px var(--color-accent), 0 0 60px var(--color-accent2);
+      animation: titlePulse 3s ease-in-out infinite;
+    }
+
+    .splash-sub {
+      font-size: 1.1rem;
+      color: rgba(255,245,249,0.6);
+      margin-bottom: 3rem;
+      letter-spacing: 0.15em;
+    }
+
+    @keyframes titlePulse {
+      0%, 100% { text-shadow: 0 0 20px var(--color-accent), 0 0 60px var(--color-accent2); }
+      50%       { text-shadow: 0 0 40px var(--color-accent), 0 0 100px var(--color-accent2); }
+    }
+
+    #open-btn {
+      /* ── EDIT: button text is in the HTML below ── */
+      font-family: var(--font-heading);
+      font-size: 1.3rem;
+      padding: 1rem 2.5rem;
+      border: 2px solid var(--color-accent);
+      border-radius: 999px;
+      background: rgba(230, 57, 70, 0.15);
+      color: var(--color-text);
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
+      animation: btnGlow 2.5s ease-in-out infinite;
+      letter-spacing: 0.05em;
+    }
+
+    #open-btn:hover {
+      transform: scale(1.07);
+      background: rgba(230, 57, 70, 0.3);
+      box-shadow: 0 0 30px var(--color-accent), 0 0 60px var(--color-accent2);
+    }
+
+    @keyframes btnGlow {
+      0%, 100% { box-shadow: 0 0 10px var(--color-accent); }
+      50%       { box-shadow: 0 0 30px var(--color-accent), 0 0 50px var(--color-accent2); }
+    }
+
+    /* Floating hearts on splash */
+    .splash-heart {
+      position: absolute;
+      font-size: 1.5rem;
+      animation: floatUp 6s ease-in-out infinite;
+      opacity: 0;
+      pointer-events: none;
+      user-select: none;
+    }
+
+    @keyframes floatUp {
+      0%   { opacity: 0; transform: translateY(0) scale(0.5); }
+      20%  { opacity: 0.8; }
+      100% { opacity: 0; transform: translateY(-80vh) scale(1.2); }
+    }
+
+    /* ============================================================
+       MUSIC PILL  (bottom-right)
+    ============================================================ */
+    #music-pill {
+      position: fixed;
+      bottom: 1.5rem;
+      right: 1.5rem;
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.6rem 1.2rem;
+      border-radius: 999px;
+      /* ── EDIT: music pill colours ── */
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255,255,255,0.2);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+      transform: translateY(100px);
+      opacity: 0;
+      transition: opacity 0.4s;
+    }
+
+    #music-pill .pill-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 1.2rem;
+      color: var(--color-text);
+      transition: transform 0.15s;
+    }
+
+    #music-pill .pill-btn:hover { transform: scale(1.2); }
+
+    #vol-slider {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 80px;
+      height: 4px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.3);
+      outline: none;
+      cursor: pointer;
+    }
+
+    #vol-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: var(--color-accent);
+      cursor: pointer;
+      box-shadow: 0 0 6px var(--color-accent);
+    }
+
+    /* ============================================================
+       MAIN CONTENT WRAPPER
+    ============================================================ */
+    #main-content {
+      position: relative;
+      z-index: 1;
+      opacity: 0;
+    }
+
+    /* ============================================================
+       HERO SECTION
+    ============================================================ */
+    #hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+      padding: 2rem;
+    }
+
+    /* ── Split-letter hero title ── */
+    #hero-title {
+      font-family: var(--font-heading);
+      font-size: clamp(3rem, 10vw, 7rem);
+      font-weight: 700;
+      /* ── EDIT: hero title text is in the JS below (heroTitleText) ── */
+      color: transparent;
+      -webkit-text-stroke: 1px rgba(255,255,255,0.3);
+      text-align: center;
+      position: relative;
+      z-index: 2;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0;
+      margin-bottom: 1rem;
+      user-select: none;
+    }
+
+    .hero-letter {
+      display: inline-block;
+      cursor: default;
+      transition: color 0.2s, text-shadow 0.2s, transform 0.3s;
+      color: transparent;
+      -webkit-text-stroke: 2px rgba(255,255,255,0.4);
+    }
+
+    .hero-letter:hover {
+      color: var(--color-text);
+      -webkit-text-stroke: 0px;
+      text-shadow: 0 0 20px var(--color-accent), 0 0 50px var(--color-accent2);
+      transform: translateY(-12px) scale(1.15);
+    }
+
+    .hero-letter.space { width: 0.4em; }
+
+    .hero-sub {
+      font-family: var(--font-heading);
+      font-style: italic;
+      font-size: clamp(1rem, 3vw, 1.6rem);
+      color: rgba(255,245,249,0.6);
+      text-align: center;
+      position: relative;
+      z-index: 2;
+      /* ── EDIT: hero subtitle text is in the HTML below ── */
+    }
+
+    /* ── Polaroid canvas layer ── */
+    #polaroid-layer {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* ── Individual polaroid ── */
+    .polaroid {
+      position: absolute;
+      pointer-events: all;
+      cursor: pointer;
+      /* width / height set by JS */
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background: #fff;
+      padding: 10px 10px 36px 10px;
+      border-radius: 3px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.5), 0 2px 8px rgba(0,0,0,0.3);
+      transform-origin: center center;
+      user-select: none;
+      /* will-change managed by JS */
+    }
+
+    .polaroid img {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      object-fit: cover;
+      display: block;
+      border-radius: 1px;
+    }
+
+    .polaroid .caption {
+      font-family: var(--font-heading);
+      font-style: italic;
+      font-size: 0.75rem;
+      color: #333;
+      margin-top: 4px;
+      text-align: center;
+      /* ── EDIT: polaroid captions set in JS (polaroidConfig) ── */
+    }
+
+    /* ============================================================
+       ITINERARY SECTION
+    ============================================================ */
+    #itinerary {
+      padding: 6rem 1.5rem 4rem;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .section-heading {
+      font-family: var(--font-heading);
+      font-size: clamp(1.8rem, 5vw, 3rem);
+      text-align: center;
+      margin-bottom: 0.5rem;
+      /* ── EDIT: section heading colour via CSS var ── */
+      color: var(--color-text);
+      text-shadow: 0 0 15px var(--color-accent2);
+    }
+
+    .section-sub {
+      text-align: center;
+      color: rgba(255,245,249,0.5);
+      margin-bottom: 3rem;
+      letter-spacing: 0.1em;
+      font-size: 0.9rem;
+    }
+
+    /* Flip card */
+    .flip-card {
+      perspective: 1200px;
+      height: 220px;
+      cursor: pointer;
+    }
+
+    .flip-card-inner {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      transform-style: preserve-3d;
+      transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .flip-card.flipped .flip-card-inner { transform: rotateY(180deg); }
+
+    .flip-card-front, .flip-card-back {
+      position: absolute;
+      inset: 0;
+      border-radius: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+      padding: 1.5rem;
+      text-align: center;
+    }
+
+    .flip-card-front {
+      background: rgba(255, 255, 255, 0.07);
+      border: 1px solid rgba(255,255,255,0.15);
+      backdrop-filter: blur(12px);
+    }
+
+    .flip-card-back {
+      background: linear-gradient(135deg, rgba(230,57,70,0.25), rgba(76,175,80,0.25));
+      border: 1px solid rgba(230,57,70,0.4);
+      backdrop-filter: blur(12px);
+      transform: rotateY(180deg);
+    }
+
+    .flip-icon { font-size: 2.5rem; margin-bottom: 0.5rem; }
+
+    .flip-card-front h3 {
+      font-family: var(--font-heading);
+      font-size: 1.2rem;
+      color: var(--color-text);
+      margin-bottom: 0.3rem;
+    }
+
+    .flip-card-front p {
+      font-size: 0.8rem;
+      color: rgba(255,245,249,0.5);
+    }
+
+    .flip-card-back h3 {
+      font-family: var(--font-heading);
+      font-size: 1.1rem;
+      color: var(--color-text);
+      margin-bottom: 0.5rem;
+    }
+
+    .flip-card-back p {
+      font-size: 0.9rem;
+      color: rgba(255,245,249,0.8);
+      line-height: 1.6;
+    }
+
+    /* ============================================================
+       YOUTUBE VIDEO SECTION
+    ============================================================ */
+    #video-section {
+      padding: 4rem 1.5rem;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .video-wrapper {
+      position: relative;
+      padding-bottom: 56.25%; /* 16:9 */
+      height: 0;
+      overflow: hidden;
+      border-radius: 1.2rem;
+    }
+
+    .video-wrapper iframe {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      border: none;
+      border-radius: 1.2rem;
+    }
+
+    #music-toggle-btn {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin: 1.2rem auto 0;
+      padding: 0.6rem 1.5rem;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.2);
+      background: rgba(255,255,255,0.08);
+      color: var(--color-text);
+      cursor: pointer;
+      font-size: 0.9rem;
+      transition: background 0.2s, transform 0.15s;
+      backdrop-filter: blur(10px);
+    }
+
+    #music-toggle-btn:hover {
+      background: rgba(255,255,255,0.15);
+      transform: scale(1.03);
+    }
+
+    /* ============================================================
+       PROPOSAL SECTION
+    ============================================================ */
+    #proposal {
+      padding: 4rem 1.5rem 8rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    #proposal-card {
+      max-width: 520px;
+      width: 100%;
+      padding: 3rem 2rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden; /* keep No btn contained visually */
+    }
+
+    #proposal-card h2 {
+      font-family: var(--font-heading);
+      font-size: clamp(1.8rem, 5vw, 2.8rem);
+      margin-bottom: 0.8rem;
+      /* ── EDIT: proposal question text in the HTML below ── */
+    }
+
+    #proposal-card p {
+      color: rgba(255,245,249,0.6);
+      margin-bottom: 2.5rem;
+      font-size: 0.95rem;
+      /* ── EDIT: proposal sub text in the HTML below ── */
+    }
+
+    .proposal-btns {
+      display: flex;
+      gap: 1.5rem;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      min-height: 60px;
+    }
+
+    #yes-btn {
+      padding: 0.85rem 2rem;
+      border-radius: 999px;
+      border: none;
+      background: linear-gradient(135deg, var(--color-accent), var(--color-accent2));
+      color: white;
+      font-size: 1.1rem;
+      font-family: var(--font-heading);
+      cursor: pointer;
+      box-shadow: 0 4px 20px rgba(230,57,70,0.5);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    #yes-btn:hover {
+      transform: scale(1.1);
+      box-shadow: 0 6px 30px rgba(230,57,70,0.7);
+    }
+
+    #no-btn {
+      padding: 0.7rem 1.5rem;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.3);
+      background: rgba(255,255,255,0.07);
+      color: rgba(255,245,249,0.7);
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: background 0.2s;
+      /* position managed by JS */
+      position: absolute;
+    }
+
+    /* ============================================================
+       LOVE NOTE MODAL
+    ============================================================ */
+    #love-modal {
+      position: fixed;
+      inset: 0;
+      z-index: 10000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0,0,0,0.6);
+      backdrop-filter: blur(8px);
+      padding: 1rem;
+    }
+
+    #love-modal.active { display: flex; }
+
+    #love-modal-inner {
+      max-width: 500px;
+      width: 100%;
+      padding: 2.5rem 2rem;
+      text-align: center;
+      position: relative;
+      background: linear-gradient(135deg, rgba(45,10,10,0.95), rgba(10,34,0,0.95));
+      border: 1px solid rgba(230,57,70,0.5);
+      border-radius: 2rem;
+      box-shadow: 0 20px 80px rgba(230,57,70,0.3);
+    }
+
+    #love-modal-inner h2 {
+      font-family: var(--font-heading);
+      font-size: 2rem;
+      margin-bottom: 1rem;
+      /* ── EDIT: modal title in HTML below ── */
+    }
+
+    #love-modal-inner p {
+      color: rgba(255,245,249,0.85);
+      line-height: 1.8;
+      margin-bottom: 1.5rem;
+      /* ── EDIT: modal message in HTML below ── */
+    }
+
+    #close-modal-btn {
+      padding: 0.6rem 2rem;
+      border-radius: 999px;
+      border: none;
+      background: linear-gradient(135deg, var(--color-accent), var(--color-accent2));
+      color: white;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: transform 0.15s;
+    }
+
+    #close-modal-btn:hover { transform: scale(1.05); }
+
+    .modal-close-x {
+      position: absolute;
+      top: 1rem; right: 1.2rem;
+      background: none; border: none;
+      color: rgba(255,245,249,0.5);
+      font-size: 1.4rem;
+      cursor: pointer;
+    }
+    .modal-close-x:hover { color: var(--color-text); }
+
+    /* ============================================================
+       PHOTO STRIP SECTION (bonus gallery row)
+    ============================================================ */
+    #photo-strip {
+      padding: 4rem 1.5rem 2rem;
+      overflow: hidden;
+    }
+
+    .strip-track {
+      display: flex;
+      gap: 1rem;
+      animation: stripScroll 30s linear infinite;
+      width: max-content;
+    }
+
+    .strip-track:hover { animation-play-state: paused; }
+
+    @keyframes stripScroll {
+      0%   { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+
+    .strip-photo {
+      width: 180px;
+      height: 180px;
+      object-fit: cover;
+      border-radius: 1rem;
+      flex-shrink: 0;
+      border: 2px solid rgba(255,255,255,0.1);
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .strip-photo:hover {
+      transform: scale(1.07);
+      box-shadow: 0 8px 30px rgba(230,57,70,0.5);
+    }
+
+    /* ============================================================
+       SCROLL FADE-IN UTILITY
+    ============================================================ */
+    .fade-in-section {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+
+    .fade-in-section.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ============================================================
+       FOOTER
+    ============================================================ */
+    footer {
+      text-align: center;
+      padding: 2rem 1rem 3rem;
+      color: rgba(255,245,249,0.3);
+      font-size: 0.8rem;
+      position: relative;
+      z-index: 1;
+    }
+  </style>
+</head>
+<body>
+
+<!-- ============================================================
+     STAR CANVAS (background)
+============================================================ -->
+<canvas id="star-canvas"></canvas>
+
+<!-- ============================================================
+     ENTRY SPLASH OVERLAY
+     EDIT: Change the title, subtitle, and button text below
+============================================================ -->
+<div id="splash">
+  <!-- Floating hearts are injected by JS -->
+  <div class="splash-title">💌 A Little Surprise</div>
+  <!-- ── EDIT: splash subtitle ── -->
+  <div class="splash-sub">something special, just for you</div>
+  <!-- ── EDIT: button label ── -->
+  <button id="open-btn">Click to Open Your Surprise 💌</button>
+</div>
+
+<!-- ============================================================
+     MUSIC PILL  (hidden until splash is dismissed)
+============================================================ -->
+<div id="music-pill">
+  <span style="font-size:1rem;">🎵</span>
+  <button class="pill-btn" id="play-pause-btn" title="Play / Pause">⏸️</button>
+  <input type="range" id="vol-slider" min="0" max="1" step="0.01" value="0.4" title="Volume" />
+  <audio id="bg-audio" loop>
+    <!-- ── EDIT: swap the audio file path here ── -->
+    <source src="./assets/Notion.mp3" type="audio/mpeg" />
+  </audio>
+</div>
+
+<!-- ============================================================
+     MAIN CONTENT
+============================================================ -->
+<div id="main-content">
+
+  <!-- ── HERO SECTION ── -->
+  <section id="hero">
+    <!-- Polaroids live here (injected by JS) -->
+    <div id="polaroid-layer"></div>
+
+    <!-- ── EDIT: hero title: controlled by heroTitleText in JS below ── -->
+    <h1 id="hero-title"></h1>
+
+    <!-- ── EDIT: hero subtitle ── -->
+    <p class="hero-sub">a moment in time, made just for us ✨</p>
+  </section>
+
+  <!-- ── PHOTO STRIP ── -->
+  <section id="photo-strip" class="fade-in-section">
+    <div class="section-heading" style="margin-bottom:1.5rem;">Our Memories 📸</div>
+    <!-- strip-track duplicated by JS for seamless loop -->
+    <div class="strip-track" id="strip-track"></div>
+  </section>
+
+  <!-- ── ITINERARY SECTION ── -->
+  <section id="itinerary" class="fade-in-section">
+    <!-- ── EDIT: itinerary section heading ── -->
+    <div class="section-heading">What We're Doing 🗓️</div>
+    <div class="section-sub">tap a card to open the details</div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6" id="itinerary-grid">
+      <!-- Cards are injected by JS from itineraryData below -->
+    </div>
+  </section>
+
+  <!-- ── VIDEO SECTION ── -->
+  <section id="video-section" class="fade-in-section">
+    <!-- ── EDIT: video section heading ── -->
+    <div class="section-heading" style="margin-bottom:0.5rem;">Watch This 🎬</div>
+    <div class="section-sub">a little something to set the mood</div>
+
+    <div class="glass" style="padding:1.2rem;">
+      <div class="video-wrapper">
+        <!-- ── EDIT: swap the video file path here ── -->
+        <video
+          id="local-video"
+          controls
+          preload="metadata"
+          style="position:absolute;inset:0;width:100%;height:100%;border-radius:1.2rem;object-fit:contain;background:#000;"
+        >
+          <source src="./assets/mom and dad's non-divorce policy.mp4" type="video/mp4" />
+          Your browser does not support the video tag.
+        </video>
+      </div>
+
+      <!-- ── EDIT: button label ── -->
+      <button id="music-toggle-btn">
+        <span id="music-toggle-icon">🎵</span>
+        Pause Background Music for Video
+      </button>
+    </div>
+  </section>
+
+  <!-- ── PROPOSAL SECTION ── -->
+  <section id="proposal" class="fade-in-section">
+    <div id="proposal-card" class="glass">
+      <div style="font-size:3rem;margin-bottom:0.5rem;">💍</div>
+      <!-- ── EDIT: proposal question ── -->
+      <h2>Will you be my date?</h2>
+      <!-- ── EDIT: proposal sub-text ── -->
+      <p>No pressure… but also, please say yes. 🥺</p>
+
+      <div class="proposal-btns" id="proposal-btns-container">
+        <!-- ── EDIT: Yes button label ── -->
+        <button id="yes-btn">Yes, Forever! ❤️</button>
+        <!-- ── EDIT: No button label ── -->
+        <button id="no-btn">No</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── FOOTER ── -->
+  <footer>
+    <!-- ── EDIT: footer text ── -->
+    made with ❤️ &amp; a little magic · forever yours
+  </footer>
+
+</div><!-- end #main-content -->
+
+<!-- ============================================================
+     LOVE NOTE MODAL
+============================================================ -->
+<div id="love-modal">
+  <div id="love-modal-inner">
+    <button class="modal-close-x" id="modal-close-x">✕</button>
+
+    <!-- ── EDIT: modal title ── -->
+    <h2>Yay! 🎉💖</h2>
+
+    <!-- ── EDIT: love note message (HTML allowed) ── -->
+    <p>
+      I knew you'd say yes 😍<br/><br/>
+      You mean the entire world to me. Every moment with you feels like magic, and I can't wait to make even more memories together.<br/><br/>
+      I love you more than words can say. 💌
+    </p>
+
+    <!-- ── EDIT: close button label ── -->
+    <button id="close-modal-btn">Aww, I love you too! 💕</button>
+  </div>
+</div>
+
+<!-- ============================================================
+     JAVASCRIPT
+============================================================ -->
+<script>
+/* ================================================================
+   ██████  CONFIGURATION BLOCK — EDIT EVERYTHING HERE ████████████
+================================================================ */
+
+// Hero title  (spaces become gaps between letters)
+const heroTitleText = "Forever & Always";
+
+// Polaroid photos + captions
+// Add or remove objects to change photos. The src is relative to index.html.
+const polaroidConfig = [
+  { src: "./assets/1.jpg",  caption: "us 🥰"      },
+  { src: "./assets/2.jpg",  caption: "💕"          },
+  { src: "./assets/3.jpg",  caption: "forever ✨"  },
+  { src: "./assets/4.PNG",  caption: "my fav 🌸"   },
+  { src: "./assets/5.jpg",  caption: "golden ☀️"  },
+  { src: "./assets/6.jpg",  caption: "& always 💫" },
+];
+
+// All photos for the scrolling strip (order freely)
+const stripPhotos = [
+  "./assets/1.jpg",
+  "./assets/2.jpg",
+  "./assets/3.jpg",
+  "./assets/4.PNG",
+  "./assets/5.jpg",
+  "./assets/6.jpg",
+  "./assets/7.jpg",
+  "./assets/8.jpg",
+  "./assets/9.jpg",
+  "./assets/10.jpg",
+  "./assets/11.jpg",
+  "./assets/holding.jpg",
+];
+
+// Itinerary cards — each links to its own page
+// EDIT: front { icon, title, hint } and page { href }
+const itineraryData = [
+  {
+    front: { icon: "🌹", title: "Activity 1", hint: "tap to see details" },
+    page: "activity1.html"
+  },
+  {
+    front: { icon: "🍽️", title: "Activity 2", hint: "tap to see details" },
+    page: "activity2.html"
+  },
+  {
+    front: { icon: "🌙", title: "Activity 3", hint: "tap to see details" },
+    page: "activity3.html"
+  },
+];
+
+// No-button dodge distance (pixels from cursor before it runs away)
+const NO_BTN_DODGE_RADIUS = 90;
+
+/* ================================================================
+   END CONFIGURATION BLOCK
+================================================================ */
+
+
+/* ────────────────────────────────────────────────────────────────
+   STAR BACKGROUND
+──────────────────────────────────────────────────────────────── */
+(function initStars() {
+  const canvas = document.getElementById("star-canvas");
+  const ctx = canvas.getContext("2d");
+  let stars = [];
+
+  function resize() {
+    canvas.width  = window.innerWidth;
+    canvas.height = window.innerHeight;
+    stars = Array.from({ length: 160 }, () => ({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height,
+      r: Math.random() * 1.5 + 0.3,
+      a: Math.random(),
+      speed: Math.random() * 0.4 + 0.1,
+      dir: Math.random() > 0.5 ? 1 : -1,
+    }));
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    stars.forEach(s => {
+      s.a += s.speed * 0.01 * s.dir;
+      if (s.a > 1 || s.a < 0) s.dir *= -1;
+      ctx.beginPath();
+      ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(255,245,249,${s.a})`;
+      ctx.fill();
+    });
+    requestAnimationFrame(draw);
+  }
+
+  resize();
+  window.addEventListener("resize", resize);
+  draw();
+})();
+
+
+/* ────────────────────────────────────────────────────────────────
+   SPLASH HEARTS
+──────────────────────────────────────────────────────────────── */
+(function spawnSplashHearts() {
+  const splash = document.getElementById("splash");
+  const heartEmojis = ["❤️","💖","💗","💓","💞","💕","🌸","✨"];
+  for (let i = 0; i < 18; i++) {
+    const h = document.createElement("span");
+    h.classList.add("splash-heart");
+    h.textContent = heartEmojis[Math.floor(Math.random() * heartEmojis.length)];
+    h.style.left  = Math.random() * 100 + "vw";
+    h.style.bottom = "-2rem";
+    h.style.animationDelay    = Math.random() * 6 + "s";
+    h.style.animationDuration = (4 + Math.random() * 5) + "s";
+    h.style.fontSize = (1 + Math.random() * 1.5) + "rem";
+    splash.appendChild(h);
+  }
+})();
+
+
+/* ────────────────────────────────────────────────────────────────
+   SPLASH → OPEN  (audio + GSAP fade)
+──────────────────────────────────────────────────────────────── */
+document.getElementById("open-btn").addEventListener("click", function () {
+  const audio   = document.getElementById("bg-audio");
+  audio.volume  = parseFloat(document.getElementById("vol-slider").value);
+  audio.play().catch(() => {});
+
+  // fade out splash
+  gsap.to("#splash", {
+    opacity: 0, duration: 1.2, ease: "power2.inOut",
+    onComplete: () => {
+      document.getElementById("splash").style.display = "none";
+    }
+  });
+
+  // fade in main content
+  gsap.to("#main-content", {
+    opacity: 1, duration: 1.5, delay: 0.4, ease: "power2.out"
+  });
+
+  // slide up music pill
+  gsap.to("#music-pill", {
+    y: 0, opacity: 1, duration: 0.8, delay: 1.2, ease: "back.out(1.5)"
+  });
+
+  // kick off GSAP hero letter entrance after main fades in
+  setTimeout(animateHeroLetters, 900);
+  // start scroll observer
+  setTimeout(initScrollFade, 1000);
+});
+
+
+/* ────────────────────────────────────────────────────────────────
+   MUSIC PILL CONTROLS
+──────────────────────────────────────────────────────────────── */
+const bgAudio     = document.getElementById("bg-audio");
+const playPauseBtn = document.getElementById("play-pause-btn");
+const volSlider    = document.getElementById("vol-slider");
+
+playPauseBtn.addEventListener("click", () => {
+  if (bgAudio.paused) {
+    bgAudio.play();
+    playPauseBtn.textContent = "⏸️";
+  } else {
+    bgAudio.pause();
+    playPauseBtn.textContent = "▶️";
+  }
+});
+
+volSlider.addEventListener("input", () => {
+  bgAudio.volume = parseFloat(volSlider.value);
+});
+
+// Video music toggle
+let musicPausedForVideo = false;
+
+document.getElementById("music-toggle-btn").addEventListener("click", function () {
+  musicPausedForVideo = !musicPausedForVideo;
+  const icon = document.getElementById("music-toggle-icon");
+
+  if (musicPausedForVideo) {
+    bgAudio.pause();
+    playPauseBtn.textContent = "▶️";
+    this.textContent = "";
+    icon.textContent = "🔇";
+    this.appendChild(icon);
+    this.append(" Resume Background Music");
+  } else {
+    bgAudio.play();
+    playPauseBtn.textContent = "⏸️";
+    this.textContent = "";
+    icon.textContent = "🎵";
+    this.appendChild(icon);
+    this.append(" Pause Background Music for Video");
+  }
+});
+
+
+/* ────────────────────────────────────────────────────────────────
+   HERO TITLE — SPLIT LETTERS
+──────────────────────────────────────────────────────────────── */
+function buildHeroTitle() {
+  const container = document.getElementById("hero-title");
+  heroTitleText.split("").forEach(ch => {
+    const span = document.createElement("span");
+    if (ch === " ") {
+      span.classList.add("hero-letter", "space");
+      span.innerHTML = "&nbsp;";
+    } else {
+      span.classList.add("hero-letter");
+      span.textContent = ch;
+    }
+    container.appendChild(span);
+  });
+}
+
+function animateHeroLetters() {
+  const letters = document.querySelectorAll(".hero-letter:not(.space)");
+  gsap.from(letters, {
+    y: 60,
+    opacity: 0,
+    duration: 0.8,
+    stagger: 0.06,
+    ease: "back.out(1.7)",
+    onComplete: () => {
+      // add hover-float animation via GSAP
+      letters.forEach((el, i) => {
+        gsap.to(el, {
+          y: -6,
+          duration: 1.5 + Math.random() * 1,
+          repeat: -1,
+          yoyo: true,
+          ease: "sine.inOut",
+          delay: i * 0.08
+        });
+      });
+    }
+  });
+}
+
+buildHeroTitle();
+
+
+/* ────────────────────────────────────────────────────────────────
+   POLAROIDS — PHYSICS
+──────────────────────────────────────────────────────────────── */
+(function initPolaroids() {
+  const layer  = document.getElementById("polaroid-layer");
+  const W = () => layer.offsetWidth  || window.innerWidth;
+  const H = () => layer.offsetHeight || window.innerHeight;
+
+  // size of each polaroid
+  const PW = 160, PH = 200;
+  const REPEL_RADIUS = 160;
+  const REPEL_FORCE  = 8;
+  const DAMPING      = 0.92;
+  const DRIFT        = 0.15; // base drift speed
+
+  let mouse = { x: -9999, y: -9999 };
+
+  // Create polaroid DOM nodes
+  const pols = polaroidConfig.map((cfg, i) => {
+    const el = document.createElement("div");
+    el.className = "polaroid";
+    el.style.width  = PW + "px";
+    el.style.height = PH + "px";
+
+    const img = document.createElement("img");
+    img.src = cfg.src;
+    img.alt = cfg.caption;
+    img.draggable = false;
+
+    const cap = document.createElement("div");
+    cap.className = "caption";
+    cap.textContent = cfg.caption;
+
+    el.appendChild(img);
+    el.appendChild(cap);
+    layer.appendChild(el);
+
+    // initial position spread
+    const x = 60 + (i % 3) * (W() / 3 - 20) + (Math.random() * 60 - 30);
+    const y = 60 + Math.floor(i / 3) * (H() / 2 - 40) + (Math.random() * 60 - 30);
+    const angle = (Math.random() - 0.5) * 20;
+
+    return {
+      el,
+      x, y,
+      vx: (Math.random() - 0.5) * DRIFT,
+      vy: (Math.random() - 0.5) * DRIFT,
+      angle,
+      vAngle: (Math.random() - 0.5) * 0.05,
+    };
+  });
+
+  function applyTransform(p) {
+    p.el.style.transform = `translate(${p.x}px, ${p.y}px) rotate(${p.angle}deg)`;
+    p.el.style.left = "0px";
+    p.el.style.top  = "0px";
+  }
+
+  function tick() {
+    const w = W(), h = H();
+    pols.forEach(p => {
+      // gentle drift (bounce off edges)
+      if (p.x < 0 || p.x > w - PW) p.vx *= -1;
+      if (p.y < 0 || p.y > h - PH) p.vy *= -1;
+
+      // mouse repel
+      const cx = p.x + PW / 2;
+      const cy = p.y + PH / 2;
+      const dx = cx - mouse.x;
+      const dy = cy - mouse.y;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+
+      if (dist < REPEL_RADIUS && dist > 0) {
+        const force = (REPEL_RADIUS - dist) / REPEL_RADIUS * REPEL_FORCE;
+        p.vx += (dx / dist) * force;
+        p.vy += (dy / dist) * force;
+        p.vAngle += (Math.random() - 0.5) * 0.3;
+      }
+
+      p.vx *= DAMPING;
+      p.vy *= DAMPING;
+      p.vAngle *= 0.95;
+
+      p.x += p.vx;
+      p.y += p.vy;
+      p.angle += p.vAngle;
+
+      // clamp
+      p.x = Math.max(0, Math.min(w - PW, p.x));
+      p.y = Math.max(0, Math.min(h - PH, p.y));
+
+      applyTransform(p);
+    });
+    requestAnimationFrame(tick);
+  }
+
+  // track mouse relative to layer
+  document.addEventListener("mousemove", e => {
+    const rect = layer.getBoundingClientRect();
+    mouse.x = e.clientX - rect.left;
+    mouse.y = e.clientY - rect.top;
+  });
+
+  // scatter on click
+  document.addEventListener("click", e => {
+    const rect = layer.getBoundingClientRect();
+    const mx = e.clientX - rect.left;
+    const my = e.clientY - rect.top;
+    pols.forEach(p => {
+      const cx = p.x + PW / 2;
+      const cy = p.y + PH / 2;
+      const dx = cx - mx;
+      const dy = cy - my;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+      if (dist < 250) {
+        const f = 12;
+        p.vx += (dx / dist) * f;
+        p.vy += (dy / dist) * f;
+      }
+    });
+  });
+
+  // initial render
+  pols.forEach(applyTransform);
+  tick();
+})();
+
+
+/* ────────────────────────────────────────────────────────────────
+   PHOTO STRIP — Build & duplicate for seamless scroll
+──────────────────────────────────────────────────────────────── */
+(function buildStrip() {
+  const track = document.getElementById("strip-track");
+  const allPhotos = [...stripPhotos, ...stripPhotos]; // duplicate for loop
+  allPhotos.forEach(src => {
+    const img = document.createElement("img");
+    img.src   = src;
+    img.alt   = "memory";
+    img.className = "strip-photo";
+    img.draggable = false;
+    track.appendChild(img);
+  });
+})();
+
+
+/* ────────────────────────────────────────────────────────────────
+   ITINERARY LINK CARDS
+──────────────────────────────────────────────────────────────── */
+(function buildItinerary() {
+  const grid = document.getElementById("itinerary-grid");
+  itineraryData.forEach(data => {
+    const a = document.createElement("a");
+    a.href   = data.page;
+    a.target = "_blank";
+    a.rel    = "noopener noreferrer";
+    a.style.textDecoration = "none";
+    a.style.display = "block";
+    a.style.height  = "220px";
+
+    a.innerHTML = `
+      <div style="
+        height:100%;
+        border-radius:1.5rem;
+        display:flex;
+        flex-direction:column;
+        align-items:center;
+        justify-content:center;
+        padding:1.5rem;
+        text-align:center;
+        background:rgba(255,255,255,0.07);
+        border:1px solid rgba(255,255,255,0.15);
+        backdrop-filter:blur(12px);
+        cursor:pointer;
+        transition:transform 0.25s, box-shadow 0.25s, background 0.25s;
+      " class="activity-card-inner">
+        <div style="font-size:2.5rem;margin-bottom:0.5rem;">${data.front.icon}</div>
+        <h3 style="font-family:var(--font-heading);font-size:1.2rem;color:var(--color-text);margin-bottom:0.3rem;">${data.front.title}</h3>
+        <p style="font-size:0.8rem;color:rgba(255,248,248,0.5);">${data.front.hint}</p>
+        <div style="margin-top:0.9rem;font-size:0.75rem;color:var(--color-accent2);letter-spacing:0.08em;">OPEN →</div>
+      </div>`;
+
+    // hover effect via JS (simpler than CSS on <a>)
+    const inner = a.querySelector(".activity-card-inner");
+    a.addEventListener("mouseenter", () => {
+      inner.style.transform  = "translateY(-6px) scale(1.03)";
+      inner.style.boxShadow  = "0 12px 40px rgba(230,57,70,0.35)";
+      inner.style.background = "rgba(255,255,255,0.12)";
+    });
+    a.addEventListener("mouseleave", () => {
+      inner.style.transform  = "";
+      inner.style.boxShadow  = "";
+      inner.style.background = "rgba(255,255,255,0.07)";
+    });
+
+    grid.appendChild(a);
+  });
+})();
+
+
+/* ────────────────────────────────────────────────────────────────
+   PROPOSAL — No button dodge
+──────────────────────────────────────────────────────────────── */
+(function initProposal() {
+  const container  = document.getElementById("proposal-btns-container");
+  const noBtn      = document.getElementById("no-btn");
+  const yesBtn     = document.getElementById("yes-btn");
+
+  // position No button initially
+  noBtn.style.right  = "1rem";
+  noBtn.style.bottom = "0";
+
+  function getRandomPos() {
+    const cw = container.offsetWidth;
+    const ch = container.offsetHeight;
+    const bw = noBtn.offsetWidth  || 70;
+    const bh = noBtn.offsetHeight || 40;
+    return {
+      x: Math.random() * (cw - bw),
+      y: Math.random() * Math.max(ch - bh, 10)
+    };
+  }
+
+  container.addEventListener("mousemove", e => {
+    const rect = container.getBoundingClientRect();
+    const mx = e.clientX - rect.left;
+    const my = e.clientY - rect.top;
+
+    const bx = parseFloat(noBtn.style.left  || (container.offsetWidth  - noBtn.offsetWidth  - 16));
+    const by = parseFloat(noBtn.style.top   || "0");
+    const bw = noBtn.offsetWidth;
+    const bh = noBtn.offsetHeight;
+
+    const cx = bx + bw / 2;
+    const cy = by + bh / 2;
+    const dx = cx - mx;
+    const dy = cy - my;
+    const dist = Math.sqrt(dx * dx + dy * dy);
+
+    if (dist < NO_BTN_DODGE_RADIUS) {
+      const pos = getRandomPos();
+      gsap.to(noBtn, {
+        left: pos.x, top: pos.y, right: "auto", bottom: "auto",
+        duration: 0.3, ease: "back.out(1.5)"
+      });
+    }
+  });
+
+  // also dodge on approach
+  noBtn.addEventListener("mouseenter", () => {
+    const pos = getRandomPos();
+    gsap.to(noBtn, {
+      left: pos.x, top: pos.y, right: "auto", bottom: "auto",
+      duration: 0.25, ease: "power2.out"
+    });
+  });
+
+  // Yes button → confetti + modal
+  yesBtn.addEventListener("click", () => {
+    // launch heart confetti
+    const defaults = { spread: 80, startVelocity: 40, scalar: 1.2, zIndex: 10001 };
+
+    function fire(particleRatio, opts) {
+      confetti({
+        ...defaults, ...opts,
+        particleCount: Math.floor(200 * particleRatio),
+        origin: { x: 0.5, y: 0.6 },
+        shapes: ["heart"],
+        colors: ["#e879a0","#c084fc","#fb7185","#f9a8d4","#fbbf24"],
+      });
+    }
+
+    fire(0.25, { spread: 26, startVelocity: 55 });
+    fire(0.2,  { spread: 60 });
+    fire(0.35, { spread: 100, decay: 0.91, scalar: 0.8 });
+    fire(0.1,  { spread: 120, startVelocity: 25, decay: 0.92, scalar: 1.2 });
+    fire(0.1,  { spread: 120, startVelocity: 45 });
+
+    // show modal
+    const modal = document.getElementById("love-modal");
+    modal.classList.add("active");
+    gsap.fromTo("#love-modal-inner",
+      { scale: 0.5, opacity: 0 },
+      { scale: 1, opacity: 1, duration: 0.5, ease: "back.out(1.7)" }
+    );
+  });
+
+  // close modal
+  function closeModal() {
+    gsap.to("#love-modal-inner", {
+      scale: 0.8, opacity: 0, duration: 0.3,
+      onComplete: () => document.getElementById("love-modal").classList.remove("active")
+    });
+  }
+
+  document.getElementById("close-modal-btn").addEventListener("click", closeModal);
+  document.getElementById("modal-close-x").addEventListener("click", closeModal);
+  document.getElementById("love-modal").addEventListener("click", function (e) {
+    if (e.target === this) closeModal();
+  });
+})();
+
+
+/* ────────────────────────────────────────────────────────────────
+   SCROLL FADE-IN
+──────────────────────────────────────────────────────────────── */
+function initScrollFade() {
+  const sections = document.querySelectorAll(".fade-in-section");
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add("visible"); });
+  }, { threshold: 0.12 });
+  sections.forEach(s => obs.observe(s));
+}
+</script>
+</body>
+</html>
