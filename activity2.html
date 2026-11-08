@@ -369,6 +369,7 @@
     .badge-action  { background: rgba(230,57,70,0.3);   color: #fecaca; border: 1px solid rgba(230,57,70,0.45);  }
     .badge-anime   { background: rgba(76,175,80,0.3);   color: #bbf7d0; border: 1px solid rgba(76,175,80,0.45);  }
     .badge-animated{ background: rgba(236,72,153,0.25); color: #fbcfe8; border: 1px solid rgba(236,72,153,0.45); }
+    .badge-niche   { background: rgba(168,85,247,0.3);  color: #e9d5ff; border: 1px solid rgba(168,85,247,0.45); }
   </style>
 </head>
 <body>
@@ -454,14 +455,14 @@
     <div style="display:flex;flex-wrap:wrap;gap:0.6rem;">
       <div class="franchise-pill" data-search="Back to the Future"><span>⚡</span> Back to the Future</div>
       <div class="franchise-pill" data-search="Dragon Ball"><span>🐉</span> Dragon Ball</div>
-      <div class="franchise-pill" data-search="Spider-Man"><span>🕷️</span> Spider-Man</div>
+      <div class="franchise-pill" data-search="The Goonies"><span>🏴‍☠️</span> The Goonies</div>
+      <div class="franchise-pill" data-search="Bones and All"><span>🦴</span> Bones and All</div>
       <div class="franchise-pill" data-search="Avengers"><span>🛡️</span> Avengers / Marvel</div>
       <div class="franchise-pill" data-search="Matrix"><span>💊</span> The Matrix</div>
       <div class="franchise-pill" data-search="Terminator"><span>💀</span> Terminator</div>
       <div class="franchise-pill" data-search="Interstellar"><span>🌌</span> Interstellar &amp; Nolan</div>
       <div class="franchise-pill" data-search="Jurassic"><span>🦖</span> Jurassic Park</div>
-      <div class="franchise-pill" data-search="Blade Runner"><span>🌧️</span> Blade Runner</div>
-      <div class="franchise-pill" data-search="Ghibli"><span>🌳</span> Studio Ghibli</div>
+      <div class="franchise-pill" data-search="niche"><span>🌙</span> Cult &amp; Niche Gems</div>
     </div>
   </div>
 
@@ -481,6 +482,7 @@
       <button class="cat-tab wheel-cat-btn" data-wheelcat="classic">📼 Classics</button>
       <button class="cat-tab wheel-cat-btn" data-wheelcat="action">💥 Marvel &amp; Action</button>
       <button class="cat-tab wheel-cat-btn" data-wheelcat="anime">⚡ Dragon Ball &amp; Anime</button>
+      <button class="cat-tab wheel-cat-btn" data-wheelcat="niche">🌙 Cult &amp; Niche</button>
       <button class="cat-tab wheel-cat-btn" data-wheelcat="animated">🎨 Animated</button>
     </div>
 
@@ -508,16 +510,17 @@
     </div>
 
     <!-- Search input -->
-    <input type="text" id="movie-search" placeholder="🔍 Search any movie, actor, keyword, or franchise (e.g. Back to the Future, Marvel, Dragon Ball)..." />
+    <input type="text" id="movie-search" placeholder="🔍 Search any movie, actor, keyword, or franchise (e.g. Back to the Future, Marvel, The Goonies, Dragon Ball)..." />
 
     <!-- Filter tabs -->
     <div class="cat-tabs" id="cat-tabs">
       <button class="cat-tab active" data-cat="all">All 100 Movies</button>
-      <button class="cat-tab" data-cat="tech">🤖 Tech &amp; AI (22)</button>
-      <button class="cat-tab" data-cat="scifi">🚀 Sci-Fi (16)</button>
+      <button class="cat-tab" data-cat="tech">🤖 Tech &amp; AI (18)</button>
+      <button class="cat-tab" data-cat="scifi">🚀 Sci-Fi (14)</button>
       <button class="cat-tab" data-cat="classic">📼 80s/90s Classics (16)</button>
-      <button class="cat-tab" data-cat="action">💥 Marvel &amp; Action (22)</button>
+      <button class="cat-tab" data-cat="action">💥 Marvel &amp; Action (19)</button>
       <button class="cat-tab" data-cat="anime">⚡ Dragon Ball &amp; Anime (14)</button>
+      <button class="cat-tab" data-cat="niche">🌙 Cult &amp; Niche (9)</button>
       <button class="cat-tab" data-cat="animated">🎨 Animated (10)</button>
     </div>
 
@@ -541,14 +544,13 @@
    MARVEL, AND DRAGON BALL / ANIME ENTHUSIASTS
 ================================================================ */
 const MOVIES = [
-  /* ── 🤖 TECH & AI (22 movies) ─────────────────────────── */
+  /* ── 🤖 TECH & AI (18 movies) ─────────────────────────── */
   { title:"The Matrix",                   year:1999, rating:"8.7", cat:"tech",    icon:"💊", desc:"A hacker discovers that reality is a simulation run by sentient AI machines and joins a rebellion to free humanity. A genre-defining masterpiece." },
   { title:"Ex Machina",                   year:2014, rating:"7.7", cat:"tech",    icon:"🤖", desc:"A young programmer is selected to administer a Turing test to an intelligent humanoid robot. Tense, claustrophobic, and thought-provoking." },
   { title:"Her",                          year:2013, rating:"8.0", cat:"tech",    icon:"🎧", desc:"A lonely man develops an intimate emotional bond with an advanced operating system designed to meet his every need. Beautiful and touching." },
   { title:"Blade Runner",                 year:1982, rating:"8.1", cat:"tech",    icon:"🌧️", desc:"A cyberpunk detective is tasked with hunting rogue bioengineered replicants in a rain-drenched future Los Angeles. Iconic neo-noir." },
   { title:"Blade Runner 2049",            year:2017, rating:"8.0", cat:"tech",    icon:"🌧️", desc:"A new blade runner uncovers a long-buried secret that has the potential to plunge what's left of society into chaos. Visually hypnotic." },
   { title:"The Social Network",           year:2010, rating:"7.8", cat:"tech",    icon:"💻", desc:"The brilliant, fast-talking chronicle of Facebook's inception at Harvard — genius, ambition, and ruthless betrayal." },
-  { title:"Transcendence",               year:2014, rating:"6.3", cat:"tech",    icon:"🧠", desc:"A terminally ill AI pioneer uploads his consciousness into the internet, evolving with omnipotent computing power." },
   { title:"Minority Report",              year:2002, rating:"7.7", cat:"tech",    icon:"👁️", desc:"In a high-tech future where murders are stopped before they occur, a specialized cop is accused of a murder he has yet to commit." },
   { title:"WarGames",                     year:1983, rating:"7.1", cat:"tech",    icon:"🕹️", desc:"A teenage computer whiz accidentally hacks into a military supercomputer that believes global nuclear war is just a simulation game." },
   { title:"I, Robot",                     year:2004, rating:"7.1", cat:"tech",    icon:"🤖", desc:"In 2035, a technophobic detective investigates a crime committed by a robot, uncovering a massive AI conspiracy against humanity." },
@@ -558,14 +560,11 @@ const MOVIES = [
   { title:"Ghost in the Shell",           year:1995, rating:"8.0", cat:"tech",    icon:"🧬", desc:"Major Motoko Kusanagi hunts the Puppet Master, a philosophical AI that hacks human cyborg brains. Foundational cyberpunk." },
   { title:"A.I. Artificial Intelligence", year:2001, rating:"7.1", cat:"tech",    icon:"🤖", desc:"A pioneering robotic child programmed with genuine love embarks on an emotional odyssey to become a real boy." },
   { title:"Tron: Legacy",                 year:2010, rating:"6.8", cat:"tech",    icon:"🔵", desc:"A tech heir is pulled inside the digital Grid created by his missing father. Astonishing visual design and an iconic Daft Punk score." },
-  { title:"Tron",                         year:1982, rating:"6.7", cat:"tech",    icon:"💾", desc:"The legendary ground-breaking pioneer that first took audiences inside computer arcade software and the digital frontier." },
   { title:"Ready Player One",             year:2018, rating:"7.4", cat:"tech",    icon:"🎮", desc:"In a dystopian 2045, teenagers dive into an all-encompassing virtual OASIS to find an Easter egg left by its eccentric creator." },
   { title:"The Imitation Game",           year:2014, rating:"8.0", cat:"tech",    icon:"🧩", desc:"Alan Turing leads a secret team of cryptanalysts at Bletchley Park to build the world's first machine computer and crack the Nazi Enigma." },
-  { title:"Hackers",                      year:1995, rating:"6.2", cat:"tech",    icon:"💾", desc:"Rebel high-school hackers accidentally unleash a corporate computer virus and must work together to clear their names." },
-  { title:"Colossus: The Forbin Project", year:1970, rating:"7.1", cat:"tech",    icon:"🖥️", desc:"A defense supercomputer achieves sentience and links with its Soviet counterpart to establish global machine supremacy." },
   { title:"Steve Jobs",                   year:2015, rating:"7.2", cat:"tech",    icon:"🍏", desc:"A riveting backstage portrait across three iconic product launches that defined the digital personal computing revolution." },
 
-  /* ── 🚀 SCI-FI (16 movies) ────────────────────────────── */
+  /* ── 🚀 SCI-FI (14 movies) ────────────────────────────── */
   { title:"Interstellar",                 year:2014, rating:"8.7", cat:"scifi",   icon:"🌌", desc:"Astronauts venture through a newly discovered wormhole near Saturn in search of a habitable sanctuary for humanity. Emotional & monumental." },
   { title:"Inception",                    year:2010, rating:"8.8", cat:"scifi",   icon:"🌀", desc:"A master extractor steals corporate secrets by entering the subconscious of targets during sleep and attempts to plant an idea." },
   { title:"The Prestige",                 year:2006, rating:"8.5", cat:"scifi",   icon:"🎩", desc:"Two rival Victorian magicians wage a ruthless war of illusions, bringing in Nikola Tesla's electric science to accomplish the impossible." },
@@ -578,10 +577,8 @@ const MOVIES = [
   { title:"Edge of Tomorrow",             year:2014, rating:"7.9", cat:"scifi",   icon:"🔁", desc:"An officer thrust into combat against alien mimics is caught in a time loop, becoming a lethal warrior with every death." },
   { title:"Pacific Rim",                  year:2013, rating:"6.9", cat:"scifi",   icon:"🤖", desc:"Humanity pilots colossal two-person neural-linked Jaegers to wage war against gigantic Kaiju rising from the Pacific depths." },
   { title:"Alita: Battle Angel",          year:2019, rating:"7.3", cat:"scifi",   icon:"👁️", desc:"A resurrected cyborg with extraordinary forgotten combat capabilities navigates iron city bounty hunters and motorball tournaments." },
-  { title:"Oblivion",                     year:2013, rating:"7.0", cat:"scifi",   icon:"🛩️", desc:"A drone technician on an evacuated Earth uncovers a startling truth that shatters his understanding of the war he fought." },
   { title:"Annihilation",                 year:2018, rating:"6.8", cat:"scifi",   icon:"🌿", desc:"A biologist enters 'The Shimmer', an anomalous expanding disaster zone where alien environmental mutation defies known genetics." },
   { title:"Moon",                         year:2009, rating:"7.9", cat:"scifi",   icon:"🌕", desc:"Nearing the end of a solitary three-year contract harvesting Helium-3 on the far side of the moon, an astronaut makes a shocking discovery." },
-  { title:"Elysium",                      year:2013, rating:"6.6", cat:"scifi",   icon:"🛸", desc:"On a ruined Earth, an ex-con equipped with an advanced military exoskeleton takes on a mission to infiltrate an orbital paradise." },
 
   /* ── 📼 80s/90s CLASSICS (16 movies) ──────────────────── */
   { title:"Back to the Future",           year:1985, rating:"8.5", cat:"classic", icon:"⚡", desc:"Marty McFly is accidentally sent 30 years into the past in a plutonium-powered DeLorean created by Doc Brown. The ultimate sci-fi adventure comedy." },
@@ -601,14 +598,11 @@ const MOVIES = [
   { title:"Groundhog Day",                year:1993, rating:"8.0", cat:"classic", icon:"⏰", desc:"An egotistical weatherman finds himself reliving the same day in small-town Pennsylvania indefinitely until he learns true empathy." },
   { title:"Ferris Bueller's Day Off",     year:1986, rating:"7.8", cat:"classic", icon:"🕶️", desc:"A charming high school senior fakes illness to orchestrate an unforgettable, joy-filled day off across Chicago." },
 
-  /* ── 💥 MARVEL & ACTION (22 movies) ───────────────────── */
+  /* ── 💥 MARVEL & ACTION (19 movies) ───────────────────── */
   { title:"Iron Man",                     year:2008, rating:"7.9", cat:"action",  icon:"🦾", desc:"Tech billionaire Tony Stark builds a powered suit of armor to escape terrorist captivity and becomes the armored superhero that sparked the MCU." },
   { title:"The Avengers",                 year:2012, rating:"8.0", cat:"action",  icon:"🛡️", desc:"Nick Fury brings together Captain America, Iron Man, Thor, Hulk, and Black Widow to battle Loki and an invading Chitauri army." },
   { title:"Avengers: Infinity War",       year:2018, rating:"8.4", cat:"action",  icon:"🟣", desc:"The Avengers and Guardians of the Galaxy unite against Thanos as he relentlessly hunts the six cosmic Infinity Stones." },
   { title:"Avengers: Endgame",            year:2019, rating:"8.4", cat:"action",  icon:"🟣", desc:"After Thanos wipes out half of all life, the shattered remaining heroes organize a daring quantum time heist to restore the universe." },
-  { title:"Spider-Man: Into the Spider-Verse", year:2018, rating:"8.4", cat:"action", icon:"🕷️", desc:"Teenager Miles Morales steps into the mantle of Spider-Man and joins five alternate-dimensional heroes. Revolutionary visual style." },
-  { title:"Spider-Man: Across the Spider-Verse", year:2023, rating:"8.6", cat:"action", icon:"🕷️", desc:"Miles Morales travels across the Multiverse and encounters the Spider-Society, defying a rigid canon destiny to save the ones he loves." },
-  { title:"Spider-Man: No Way Home",      year:2021, rating:"8.2", cat:"action",  icon:"🕷️", desc:"With Peter Parker's identity revealed, Doctor Strange's spell goes awry, pulling legendary villains from across the Multiverse." },
   { title:"Captain America: Winter Soldier", year:2014, rating:"7.8", cat:"action", icon:"🛡️", desc:"Steve Rogers teams up with Black Widow and Falcon to expose a deep Hydra conspiracy festering inside S.H.I.E.L.D." },
   { title:"Captain America: Civil War",   year:2016, rating:"7.8", cat:"action",  icon:"🛡️", desc:"Political oversight fractures the Avengers into opposing factions led by Captain America and Iron Man in an epic airport clash." },
   { title:"Guardians of the Galaxy",      year:2014, rating:"8.0", cat:"action",  icon:"🌌", desc:"A ragtag band of intergalactic criminals, an assassin, and a talking raccoon band together to guard a stolen cosmic orb." },
@@ -641,6 +635,17 @@ const MOVIES = [
   { title:"Your Name",                    year:2016, rating:"8.4", cat:"anime",   icon:"☄️", desc:"A high school girl in rural Japan and a high school boy in Tokyo mysteriously begin swapping bodies across time and space." },
   { title:"Weathering with You",          year:2019, rating:"7.5", cat:"anime",   icon:"☀️", desc:"A runaway teenager in a constantly rainy Tokyo befriends an orphaned girl who possesses the supernatural ability to clear the sky." },
 
+  /* ── 🌙 CULT & NICHE GEMS (9 movies) ──────────────────── */
+  { title:"The Goonies",                  year:1985, rating:"7.7", cat:"niche",   icon:"🏴‍☠️", desc:"A band of young misfits find an ancient pirate treasure map in an attic and race booby traps to find One-Eyed Willy's gold. The pinnacle of 80s adventure." },
+  { title:"Bones and All",                year:2022, rating:"6.8", cat:"niche",   icon:"🦴", desc:"Two young disenfranchised wanderers with a dark, forbidden hunger embark on an intimate 3,000-mile road trip across 1980s America. Haunting and poetic." },
+  { title:"Scott Pilgrim vs. the World",  year:2010, rating:"7.5", cat:"niche",   icon:"🎸", desc:"A bass guitarist must defeat his dream girl's seven evil exes in video-game-styled boss battles. Rapid-fire humor and comic-book visual perfection." },
+  { title:"Donnie Darko",                 year:2001, rating:"8.0", cat:"niche",   icon:"🐰", desc:"A troubled teenager narrowly escapes a falling jet engine and is guided by Frank, a bizarre giant rabbit, through a ticking tangent universe." },
+  { title:"Drive",                        year:2011, rating:"7.8", cat:"niche",   icon:"🦂", desc:"A nameless Hollywood stunt driver and getaway specialist tries to protect his vulnerable neighbor, backed by an iconic synthwave soundtrack." },
+  { title:"Stand by Me",                  year:1986, rating:"8.1", cat:"niche",   icon:"🌲", desc:"Four adventurous small-town boys embark on a trek along the railway tracks on a quest that changes their childhood forever. Pure nostalgic heart." },
+  { title:"Everything Everywhere All at Once", year:2022, rating:"7.8", cat:"niche", icon:"🥯", desc:"An exhausted immigrant laundromat owner connects with alternate versions of herself across the multiverse to heal family bonds and save reality." },
+  { title:"Labyrinth",                    year:1986, rating:"7.3", cat:"niche",   icon:"🔮", desc:"A teenager must navigate a fantastical maze within thirteen hours to rescue her baby brother from Jareth the Goblin King (David Bowie)." },
+  { title:"Baby Driver",                  year:2017, rating:"7.6", cat:"niche",   icon:"🕶️", desc:"A young, tinnitus-afflicted getaway driver orchestrates daring bank heist escapes perfectly synchronized to his personal curated mixtape." },
+
   /* ── 🎨 ANIMATED (10 movies) ─────────────────────────── */
   { title:"The Iron Giant",               year:1999, rating:"8.1", cat:"animated", icon:"🤖", desc:"During the Cold War, a young boy befriends a giant 50-foot alien metal robot and teaches him that you are who you choose to be." },
   { title:"WALL-E",                       year:2008, rating:"8.4", cat:"animated", icon:"🤖", desc:"A solitary waste-allocator robot left to clean an abandoned Earth embarks on a space journey that will determine the fate of humankind." },
@@ -657,8 +662,8 @@ const MOVIES = [
 /* ================================================================
    BUILD FULL 100 MOVIE CARDS
 ================================================================ */
-const badgeClass = { tech:"badge-tech", scifi:"badge-scifi", classic:"badge-classic", action:"badge-action", anime:"badge-anime", animated:"badge-animated" };
-const catLabel   = { tech:"🤖 Tech & AI", scifi:"🚀 Sci-Fi", classic:"📼 Classic", action:"💥 Action", anime:"⚡ Anime", animated:"🎨 Animated" };
+const badgeClass = { tech:"badge-tech", scifi:"badge-scifi", classic:"badge-classic", action:"badge-action", anime:"badge-anime", animated:"badge-animated", niche:"badge-niche" };
+const catLabel   = { tech:"🤖 Tech & AI", scifi:"🚀 Sci-Fi", classic:"📼 Classic", action:"💥 Action", anime:"⚡ Anime", animated:"🎨 Animated", niche:"🌙 Cult & Niche" };
 
 const grid = document.getElementById("movie-grid");
 let activeFilter = "all";
