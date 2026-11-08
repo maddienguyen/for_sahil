@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>One Last Question... 💌</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --color-bg-from: #1a0005;
+      --color-bg-to:   #0a2200;
+      --color-accent:  #e63946;
+      --color-accent2: #4caf50;
+      --color-gold:    #fbbf24;
+      --color-text:    #fff8f8;
+      --font-heading:  'Playfair Display', serif;
+      --font-body:     'Lato', sans-serif;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--font-body);
+      background: linear-gradient(135deg, var(--color-bg-from) 0%, var(--color-bg-to) 100%);
+      color: var(--color-text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* ── Star Background ── */
+    #star-canvas {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .glass {
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      border-radius: 2rem;
+      box-shadow: 0 20px 80px rgba(0, 0, 0, 0.5), 0 0 40px rgba(230, 57, 70, 0.2);
+    }
+
+    #main-card {
+      max-width: 560px;
+      width: 100%;
+      padding: 3rem 2.2rem;
+      text-align: center;
+      position: relative;
+      z-index: 10;
+      transition: all 0.4s ease;
+    }
+
+    .card-title {
+      font-family: var(--font-heading);
+      font-size: clamp(2rem, 5.5vw, 2.9rem);
+      font-weight: 700;
+      margin-bottom: 0.8rem;
+      color: var(--color-text);
+      text-shadow: 0 0 25px var(--color-accent);
+      line-height: 1.25;
+    }
+
+    .card-subtitle {
+      font-size: 1.05rem;
+      color: rgba(255, 248, 248, 0.7);
+      margin-bottom: 2.5rem;
+      letter-spacing: 0.04em;
+    }
+
+    .button-arena {
+      position: relative;
+      min-height: 120px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 1.5rem;
+    }
+
+    #yes-btn {
+      padding: 0.95rem 2.4rem;
+      border-radius: 999px;
+      border: none;
+      background: linear-gradient(135deg, var(--color-accent), var(--color-accent2));
+      color: white;
+      font-size: 1.15rem;
+      font-family: var(--font-heading);
+      cursor: pointer;
+      box-shadow: 0 6px 25px rgba(230, 57, 70, 0.5);
+      transition: transform 0.2s, box-shadow 0.2s;
+      z-index: 5;
+    }
+    #yes-btn:hover {
+      transform: scale(1.1);
+      box-shadow: 0 8px 35px rgba(230, 57, 70, 0.75);
+    }
+
+    #no-btn {
+      padding: 0.75rem 1.6rem;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      background: rgba(255, 255, 255, 0.08);
+      color: rgba(255, 248, 248, 0.75);
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s;
+      user-select: none;
+      position: relative;
+      z-index: 4;
+    }
+    #no-btn:hover {
+      background: rgba(255, 255, 255, 0.18);
+      color: var(--color-text);
+    }
+
+    /* ── The "No" outcome message card ── */
+    #no-outcome {
+      display: none;
+      margin-top: 2rem;
+      padding: 2rem 1.8rem;
+      background: rgba(45, 10, 10, 0.85);
+      border: 1px solid rgba(230, 57, 70, 0.6);
+      border-radius: 1.5rem;
+      animation: fadeInOutcome 0.5s ease forwards;
+    }
+
+    @keyframes fadeInOutcome {
+      from { opacity: 0; transform: translateY(15px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .no-message-text {
+      font-family: var(--font-heading);
+      font-style: italic;
+      font-size: 1.25rem;
+      color: #ffccd5;
+      line-height: 1.85;
+      margin-bottom: 1.5rem;
+      text-shadow: 0 0 15px rgba(230, 57, 70, 0.3);
+    }
+
+    /* ── The "Yes" outcome modal / screen ── */
+    #yes-modal {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      background: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(10px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+    }
+    #yes-modal.active { display: flex; }
+
+    #yes-modal-card {
+      max-width: 520px;
+      width: 100%;
+      background: linear-gradient(135deg, rgba(45, 10, 10, 0.95), rgba(10, 34, 0, 0.95));
+      border: 1px solid rgba(76, 175, 80, 0.5);
+      border-radius: 2rem;
+      padding: 3rem 2.2rem;
+      text-align: center;
+      box-shadow: 0 25px 90px rgba(76, 175, 80, 0.35);
+    }
+
+    .back-nav-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-top: 2rem;
+      padding: 0.55rem 1.4rem;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      background: rgba(255, 255, 255, 0.08);
+      color: rgba(255, 248, 248, 0.65);
+      font-size: 0.85rem;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+    .back-nav-link:hover {
+      background: rgba(255, 255, 255, 0.15);
+      color: var(--color-text);
+      transform: translateX(-3px);
+    }
+  </style>
+</head>
+<body>
+
+<!-- Twinkling stars -->
+<canvas id="star-canvas"></canvas>
+
+<div id="main-card" class="glass">
+  <div style="font-size:3.5rem;margin-bottom:0.6rem;">🥺💌</div>
+  <h1 class="card-title">Will you consider another date with me?</h1>
+  <p class="card-subtitle">I had the best time today... what do you say?</p>
+
+  <div class="button-arena" id="button-arena">
+    <button id="yes-btn">Yes, Absolutely! ❤️</button>
+    <button id="no-btn">No</button>
+  </div>
+
+  <!-- Special outcome if they persist on clicking "No" -->
+  <div id="no-outcome">
+    <div style="font-size:2.8rem;margin-bottom:0.6rem;">🥺💔</div>
+    <div class="no-message-text" id="no-message-text">
+      "im sorry for failing again, i love you and i was hoping you would like todays date. if this &quot;no&quot; was a mistake sahil, u owe me dih in the morning"
+    </div>
+    <button id="reconsider-btn" style="
+      padding:0.75rem 2rem;
+      border-radius:999px;
+      border:none;
+      background:linear-gradient(135deg,var(--color-accent),var(--color-accent2));
+      color:white;
+      font-weight:700;
+      cursor:pointer;
+      font-size:1rem;
+      box-shadow:0 4px 20px rgba(230,57,70,0.5);
+      transition:transform 0.2s;
+    ">Wait... Take It Back! I Mean YES! 🥰❤️</button>
+  </div>
+
+  <div style="margin-top:1.5rem;">
+    <a href="activity3.html" class="back-nav-link">← Back to Vision Board</a>
+  </div>
+</div>
+
+<!-- "Yes" Celebration Modal -->
+<div id="yes-modal">
+  <div id="yes-modal-card">
+    <div style="font-size:4rem;margin-bottom:0.8rem;">🎉🥰💖</div>
+    <h2 style="font-family:var(--font-heading);font-size:2.2rem;margin-bottom:0.8rem;color:var(--color-text);text-shadow:0 0 20px var(--color-accent2);">
+      YAAAY!! It's a Date! 💕
+    </h2>
+    <p style="color:rgba(255,248,248,0.9);font-size:1.1rem;line-height:1.8;margin-bottom:2rem;">
+      You just made my whole heart light up. 🥰<br/>
+      I had so much fun with you today, and I cannot wait for our next adventure together.<br/><br/>
+      I love you forever and always, Sahil. 💌
+    </p>
+    <a href="index.html" style="
+      display:inline-block;
+      padding:0.85rem 2.2rem;
+      border-radius:999px;
+      background:linear-gradient(135deg,var(--color-accent),var(--color-accent2));
+      color:white;
+      font-family:var(--font-heading);
+      font-size:1.1rem;
+      text-decoration:none;
+      box-shadow:0 6px 25px rgba(76,175,80,0.4);
+      transition:transform 0.2s;
+    ">🏠 Return to Start</a>
+  </div>
+</div>
+
+<script>
+  /* ── Star Background ── */
+  (function initStars() {
+    const canvas = document.getElementById("star-canvas");
+    const ctx = canvas.getContext("2d");
+    let stars = [];
+
+    function resize() {
+      canvas.width  = window.innerWidth;
+      canvas.height = window.innerHeight;
+      stars = Array.from({ length: 140 }, () => ({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        r: Math.random() * 1.5 + 0.3,
+        a: Math.random(),
+        speed: Math.random() * 0.35 + 0.1,
+        dir: Math.random() > 0.5 ? 1 : -1,
+      }));
+    }
+
+    function draw() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      stars.forEach(s => {
+        s.a += s.speed * 0.01 * s.dir;
+        if (s.a > 1 || s.a < 0) s.dir *= -1;
+        ctx.beginPath();
+        ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(255,248,248,${s.a})`;
+        ctx.fill();
+      });
+      requestAnimationFrame(draw);
+    }
+
+    resize();
+    window.addEventListener("resize", resize);
+    draw();
+  })();
+
+  /* ── Dodge & Click Logic for "No" Button ── */
+  const noBtn     = document.getElementById("no-btn");
+  const arena     = document.getElementById("button-arena");
+  const yesBtn    = document.getElementById("yes-btn");
+  const noOutcome = document.getElementById("no-outcome");
+  const yesModal  = document.getElementById("yes-modal");
+
+  let dodgeCount = 0;
+  const MAX_DODGES = 2; // Dodges exactly 2 times
+
+  function dodgeNoButton() {
+    if (dodgeCount >= MAX_DODGES) return; // After 2 dodges, stay in place so it can be clicked
+
+    dodgeCount++;
+
+    // Calculate boundary within the button arena
+    const arenaRect = arena.getBoundingClientRect();
+    const btnRect   = noBtn.getBoundingClientRect();
+
+    // Alternate left/right offset dramatically
+    const rangeX = 140;
+    const rangeY = 45;
+    const randomX = (dodgeCount % 2 === 1) ? rangeX : -rangeX;
+    const randomY = (Math.random() - 0.5) * rangeY * 2;
+
+    noBtn.style.position = "relative";
+    gsap.to(noBtn, {
+      x: randomX,
+      y: randomY,
+      duration: 0.28,
+      ease: "back.out(2)"
+    });
+
+    if (dodgeCount === MAX_DODGES) {
+      // Small visual cue that it gave up running
+      setTimeout(() => {
+        noBtn.style.borderColor = "rgba(230,57,70,0.5)";
+      }, 300);
+    }
+  }
+
+  // Dodge when mouse gets close or enters button
+  noBtn.addEventListener("mouseenter", () => {
+    if (dodgeCount < MAX_DODGES) {
+      dodgeNoButton();
+    }
+  });
+
+  // Also trigger on touch/click attempts while dodgeCount < MAX_DODGES
+  noBtn.addEventListener("touchstart", (e) => {
+    if (dodgeCount < MAX_DODGES) {
+      e.preventDefault();
+      dodgeNoButton();
+    }
+  });
+
+  // When they actually click "No" (after it stops dodging)
+  noBtn.addEventListener("click", () => {
+    if (dodgeCount < MAX_DODGES) {
+      dodgeNoButton();
+      return;
+    }
+
+    // Hide the buttons arena
+    arena.style.display = "none";
+    // Show the requested text
+    noOutcome.style.display = "block";
+    gsap.fromTo(noOutcome, 
+      { scale: 0.85, opacity: 0 },
+      { scale: 1, opacity: 1, duration: 0.45, ease: "back.out(1.4)" }
+    );
+  });
+
+  /* ── "Yes" Button Celebration ── */
+  function triggerYesCelebration() {
+    // Launch heart confetti
+    const defaults = { spread: 80, startVelocity: 45, scalar: 1.3, zIndex: 10001 };
+    function fire(particleRatio, opts) {
+      confetti({
+        ...defaults, ...opts,
+        particleCount: Math.floor(180 * particleRatio),
+        origin: { x: 0.5, y: 0.55 },
+        shapes: ["heart"],
+        colors: ["#e63946", "#4caf50", "#fbbf24", "#ff758f", "#ffffff"],
+      });
+    }
+
+    fire(0.25, { spread: 30, startVelocity: 55 });
+    fire(0.2,  { spread: 65 });
+    fire(0.35, { spread: 110, decay: 0.91, scalar: 1.1 });
+    fire(0.1,  { spread: 130, startVelocity: 25, decay: 0.92, scalar: 1.4 });
+    fire(0.1,  { spread: 140, startVelocity: 45 });
+
+    yesModal.classList.add("active");
+    gsap.fromTo("#yes-modal-card",
+      { scale: 0.6, opacity: 0 },
+      { scale: 1, opacity: 1, duration: 0.5, ease: "back.out(1.6)" }
+    );
+  }
+
+  yesBtn.addEventListener("click", triggerYesCelebration);
+
+  // If he takes back the "No"
+  document.getElementById("reconsider-btn").addEventListener("click", () => {
+    noOutcome.style.display = "none";
+    triggerYesCelebration();
+  });
+</script>
+</body>
+</html>
